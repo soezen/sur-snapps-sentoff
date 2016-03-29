@@ -1,12 +1,10 @@
 package sur.snapps.sentoff.api.validation;
 
 import javax.validation.Constraint;
-import javax.validation.GroupSequence;
 import javax.validation.Payload;
 import javax.validation.ReportAsSingleViolation;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
-import javax.validation.groups.Default;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -20,16 +18,15 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = { })
-@DecimalMin(value = "0")
-@Digits(integer = 13, fraction = 0)
+@Constraint(validatedBy = {})
 @ReportAsSingleViolation
-public @interface DateValue {
+@DecimalMin(value = "0", inclusive = false)
+@Digits(integer = 10, fraction = 2)
+public @interface AmountValue {
 
-    String message() default "invalid date format";
+    String message() default "invalid amount format";
 
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };
-
 }

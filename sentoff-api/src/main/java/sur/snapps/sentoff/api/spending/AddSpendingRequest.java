@@ -1,9 +1,13 @@
 package sur.snapps.sentoff.api.spending;
 
+import sur.snapps.sentoff.api.validation.AmountValue;
 import sur.snapps.sentoff.api.validation.DateValue;
 
+import javax.validation.GroupSequence;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 
 /**
  * @author rogge
@@ -15,7 +19,7 @@ public class AddSpendingRequest {
     @DateValue
     private String date;
     @NotNull
-    @Digits(integer = 10, fraction = 2)
+    @AmountValue
     private String amount;
 
     private String location;

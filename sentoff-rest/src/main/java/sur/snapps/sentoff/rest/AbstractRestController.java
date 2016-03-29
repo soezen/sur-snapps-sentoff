@@ -56,7 +56,12 @@ public abstract class AbstractRestController {
     }
 
     private Error createError(org.springframework.validation.FieldError fieldError) {
-        return new FieldError(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldError.getCode()), fieldError.getField(), fieldError.getDefaultMessage());
+        String code = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldError.getCode());
+        if ("date_value".equals(code)
+            || "amount_value".equals(code)) {
+            code = "invalid_format";
+        }
+        return new FieldError(code, fieldError.getField(), fieldError.getDefaultMessage());
     }
 
     private Error createError(Exception ex) {
