@@ -1,12 +1,9 @@
 package sur.snapps.sentoff.api.spending;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import sur.snapps.sentoff.api.validation.ValidAmount;
-import sur.snapps.sentoff.api.validation.ValidDate;
+import sur.snapps.sentoff.api.validation.DateValue;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author rogge
@@ -15,10 +12,10 @@ import java.util.Date;
 public class AddSpendingRequest {
 
     @NotNull
-    @ValidDate
+    @DateValue
     private String date;
     @NotNull
-    @ValidAmount
+    @Digits(integer = 10, fraction = 2)
     private String amount;
 
     private String location;

@@ -1,11 +1,9 @@
-package sur.snapps.sentoff.rest.test.builder;
+package sur.snapps.sentoff.api.test.spending.builder;
 
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.util.Date;
-import java.util.logging.SimpleFormatter;
 
 /**
  * @author rogge

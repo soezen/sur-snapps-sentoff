@@ -4,7 +4,7 @@ import org.junit.Test;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
 import sur.snapps.sentoff.api.spending.AddSpendingResponse;
 import sur.snapps.sentoff.rest.test.assertion.AddSpendingResponseAssertion;
-import sur.snapps.sentoff.rest.test.builder.AddSpendingRequestBuilder;
+import sur.snapps.sentoff.api.test.spending.builder.AddSpendingRequestBuilder;
 
 import static org.junit.Assert.assertNotNull;
 
