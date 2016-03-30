@@ -25,7 +25,7 @@ public class AddSpendingRequestBuilder {
      */
     public static AddSpendingRequestBuilder minimalAddSpendingRequest() {
         return new AddSpendingRequestBuilder()
-                .withDate(new Date())
+                .withDate(new Date(123))
                 .withAmount(BigDecimal.ONE);
     }
 
