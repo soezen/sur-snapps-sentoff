@@ -1,13 +1,15 @@
 package sur.snapps.sentoff.api.spending;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import sur.snapps.sentoff.api.validation.AmountValue;
 import sur.snapps.sentoff.api.validation.DateValue;
 
-import javax.validation.GroupSequence;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.groups.Default;
+import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author rogge
@@ -22,7 +24,15 @@ public class AddSpendingRequest {
     @AmountValue
     private String amount;
 
-    private String location;
+    @Valid
+    private Store store;
+
+    @Valid
+    private List<Payment> payments = Collections.emptyList();
+
+    @Valid
+    @JsonProperty("products")
+    private List<PurchasedProduct> purchasedProducts = Collections.emptyList();
 
     public void setAmount(String amount) {
         this.amount = amount;
@@ -32,8 +42,8 @@ public class AddSpendingRequest {
         this.date = date;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public String getAmount() {
@@ -44,7 +54,23 @@ public class AddSpendingRequest {
         return date;
     }
 
-    public String getLocation() {
-        return location;
+    public Store getStore() {
+        return store;
+    }
+
+    public List<Payment> getPayments() {
+        return Collections.unmodifiableList(payments);
+    }
+
+    public void addPayment(Payment payment) {
+        payments.add(payment);
+    }
+
+    public List<PurchasedProduct> getPurchasedProducts() {
+        return Collections.unmodifiableList(purchasedProducts);
+    }
+
+    public void addPurchasedProduct(PurchasedProduct purchasedProduct) {
+        purchasedProducts.add(purchasedProduct);
     }
 }

@@ -23,7 +23,7 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void success_maximalRequest() {
-        AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest().withLocation("Store in City").build();
+        AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest().withStoreName("Colruyt").withStoreLocation("Store in City").build();
         postAddSpendingRequest(request)
                 .assertSuccess();
     }

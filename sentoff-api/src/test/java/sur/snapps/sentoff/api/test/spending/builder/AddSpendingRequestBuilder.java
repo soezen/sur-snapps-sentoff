@@ -1,6 +1,7 @@
 package sur.snapps.sentoff.api.test.spending.builder;
 
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
+import sur.snapps.sentoff.api.spending.Store;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,9 +13,11 @@ import java.util.Date;
 public class AddSpendingRequestBuilder {
 
     private AddSpendingRequest request;
+    private Store store;
 
     private AddSpendingRequestBuilder() {
         request = new AddSpendingRequest();
+        store = new Store();
     }
 
     /**
@@ -36,8 +39,15 @@ public class AddSpendingRequestBuilder {
         return this;
     }
 
-    public AddSpendingRequestBuilder withLocation(String location) {
-        request.setLocation(location);
+    public AddSpendingRequestBuilder withStoreLocation(String location) {
+        store.setLocation(location);
+        request.setStore(store);
+        return this;
+    }
+
+    public AddSpendingRequestBuilder withStoreName(String name) {
+        store.setName(name);
+        request.setStore(store);
         return this;
     }
 

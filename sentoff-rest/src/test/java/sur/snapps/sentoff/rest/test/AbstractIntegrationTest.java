@@ -6,6 +6,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.*;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import sur.snapps.sentoff.rest.Application;
 
@@ -16,6 +17,7 @@ import sur.snapps.sentoff.rest.Application;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @WebIntegrationTest(randomPort = true)
+@ActiveProfiles("test")
 public abstract class AbstractIntegrationTest {
 
     @Value("${local.server.port}")

@@ -1,5 +1,24 @@
 {
   "date" : 1459107507525,
   "amount" : 12.23,
-  "location" : "Colruyt Harelbeke"
+  "store" : { "name": "Colruyt", "location": "Harelbeke" },
+  "payments": [
+    { "accountId": 1, "amount": 10.23 },
+    { "accountId": 2, "amount": 2 }],
+  "products": [
+    {
+      "code": "123",
+      "description": "Boni Selection 150g chips paprika",
+      "type": 1,
+      "unitPrice": 1.23,
+      "units": 1
+    },
+    {
+      "code": "234",
+      "description": "GreenOak braadpan",
+      "type": 2,
+      "unitPrice": 6,
+      "units": 2
+    }
+  ]
 }
