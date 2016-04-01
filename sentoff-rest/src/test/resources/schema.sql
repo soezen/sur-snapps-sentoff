@@ -62,10 +62,10 @@ CREATE TABLE h_store_locations (
 );
 
 CREATE TABLE purchases (
-	id VARCHAR(40) NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
 	DATE DATE NOT NULL,
-	store_location_id VARCHAR(40) NOT NULL,
-	version INT NOT NULL,
+	amount BIGINT NOT NULL,
+	store_location_id VARCHAR(40),
 	PRIMARY KEY (id)
 );
 
@@ -294,7 +294,7 @@ CREATE TABLE stores (
 
 CREATE INDEX FK_TOKENS_ENTITY_ID ON tokens (entity_id ASC);
 
-CREATE UNIQUE INDEX UQ_STORE_PRODUCTS_CODE_PER_STORE ON store_products (store_id ASC);
+CREATE UNIQUE INDEX UQ_STORE_PRODUCTS_CODE_PER_STORE_1 ON store_products (store_id ASC);
 
 CREATE INDEX FK_EVENTS_USER_ID ON events (user_id ASC);
 
@@ -308,7 +308,7 @@ CREATE INDEX FK_STORE_PRODUCTS_PRODUCT ON store_products (product_id ASC);
 
 CREATE INDEX FK_PURCHASED_PRODUCTS_PRODUCT ON purchased_products (product_id ASC);
 
-CREATE UNIQUE INDEX UQ_STORE_PRODUCTS_CODE_PER_STORE ON store_products (code ASC);
+CREATE UNIQUE INDEX UQ_STORE_PRODUCTS_CODE_PER_STORE_2 ON store_products (code ASC);
 
 CREATE INDEX FK_PURCHASED_PRODUCTS_PURCHASE ON purchased_products (purchase_id ASC);
 

@@ -1,17 +1,19 @@
 package sur.snapps.sentoff.rest.config;
 
-import javax.annotation.Resource;
-import javax.sql.DataSource;
-
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import javax.annotation.Resource;
+import javax.sql.DataSource;
 
 /**
  * @author rogge
  * @since 26/03/2016.
  */
 @Configuration
+@ComponentScan({"sur.snapps.sentoff.domain.repo", "sur.snapps.sentoff.domain.mapper"})
 public class DatabaseConfig {
 
     @Resource

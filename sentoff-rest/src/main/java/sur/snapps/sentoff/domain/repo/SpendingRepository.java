@@ -1,13 +1,13 @@
-package sur.snapps.sentoff.rest.spending;
+package sur.snapps.sentoff.domain.repo;
 
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import sur.snapps.sentoff.domain.Spending;
+import sur.snapps.sentoff.domain.table.PurchasesTable;
 
 import javax.sql.DataSource;
-import java.util.Map;
 
 /**
  * @author rogge
@@ -22,12 +22,21 @@ public class SpendingRepository extends NamedParameterJdbcDaoSupport {
     }
 
     public void addSpending(Spending spending) {
-        SimpleJdbcInsert sji = new SimpleJdbcInsert(getJdbcTemplate())
-                .withTableName("SPENDING")
-                .usingGeneratedKeyColumns("id");
-        Map<String, Object> args = Maps.newHashMap();
-        args.put("test", "test");
-        Number generatedKey = sji.executeAndReturnKey(args);
+        Number generatedKey = insert(spending).into(Tables.purchases());
         spending.setId(generatedKey);
+    }
+
+    private <T extends Row> InsertStatement<T> insert(T row) {
+        return new InsertStatement<T>(new SimpleJdbcInsert(getJdbcTemplate()), row);
+    }
+
+    public static final class Tables {
+        static PurchasesTable purchases() {
+            return new PurchasesTable();
+        }
+
+        static StoreLocationsTable storeLocations() {
+            return new StoreLocationsTable();
+        }
     }
 }

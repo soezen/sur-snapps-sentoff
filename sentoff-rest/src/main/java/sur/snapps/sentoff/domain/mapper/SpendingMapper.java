@@ -1,8 +1,9 @@
-package sur.snapps.sentoff.rest.spending;
+package sur.snapps.sentoff.domain.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
+import sur.snapps.sentoff.domain.Spending;
 import sur.snapps.sentoff.rest.util.TypeConverter;
 
 /**

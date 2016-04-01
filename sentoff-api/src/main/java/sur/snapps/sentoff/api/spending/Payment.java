@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class Payment {
 
     @NotNull
-    // TODO verify account id exists in db
+    // TODO verify account id exists in domain
     private String accountId;
 
     @NotNull

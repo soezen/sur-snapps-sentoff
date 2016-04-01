@@ -1,4 +1,4 @@
-package sur.snapps.sentoff.rest.spending;
+package sur.snapps.sentoff.rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
 import sur.snapps.sentoff.api.spending.AddSpendingResponse;
+import sur.snapps.sentoff.domain.Spending;
+import sur.snapps.sentoff.domain.mapper.SpendingMapper;
+import sur.snapps.sentoff.domain.repo.SpendingRepository;
 import sur.snapps.sentoff.rest.AbstractRestController;
 
 import javax.validation.Valid;

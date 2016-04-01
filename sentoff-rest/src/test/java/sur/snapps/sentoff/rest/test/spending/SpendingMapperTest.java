@@ -7,8 +7,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
 import sur.snapps.sentoff.api.test.spending.builder.AddSpendingRequestBuilder;
-import sur.snapps.sentoff.rest.spending.Spending;
-import sur.snapps.sentoff.rest.spending.SpendingMapper;
+import sur.snapps.sentoff.domain.Spending;
+import sur.snapps.sentoff.domain.mapper.SpendingMapper;
 import sur.snapps.sentoff.rest.util.TypeConverter;
 
 import java.math.BigDecimal;
