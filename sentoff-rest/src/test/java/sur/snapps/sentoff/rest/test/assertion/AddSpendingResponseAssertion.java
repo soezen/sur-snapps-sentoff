@@ -23,6 +23,10 @@ public class AddSpendingResponseAssertion {
         return this;
     }
 
+    public Number getSpendingId() {
+        return response.getId();
+    }
+
     public AddSpendingResponseAssertion assertFailure() {
         assertTrue("Expected response to contain errors", response.hasErrors());
         return this;

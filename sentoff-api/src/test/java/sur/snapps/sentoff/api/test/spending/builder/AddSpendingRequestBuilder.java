@@ -3,6 +3,7 @@ package sur.snapps.sentoff.api.test.spending.builder;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
 import sur.snapps.sentoff.api.store.JsonAddress;
 import sur.snapps.sentoff.api.store.JsonStore;
+import sur.snapps.sentoff.api.store.JsonStoreDetails;
 import sur.snapps.sentoff.api.store.JsonStoreReference;
 
 import java.math.BigDecimal;
@@ -16,13 +17,13 @@ public class AddSpendingRequestBuilder {
 
     private AddSpendingRequest request;
     private JsonStore store;
-    private JsonStoreReference storeReference;
+    private JsonStoreDetails storeDetails;
     private JsonAddress storeAddress;
 
     private AddSpendingRequestBuilder() {
         request = new AddSpendingRequest();
         store = new JsonStore();
-        storeReference = new JsonStoreReference();
+        storeDetails = new JsonStoreDetails();
         storeAddress = new JsonAddress();
     }
 
@@ -46,27 +47,30 @@ public class AddSpendingRequestBuilder {
     }
 
     public AddSpendingRequestBuilder withStoreType(String type) {
-        store.setType(type);
+        storeDetails.setType(type);
+        store.setDetails(storeDetails);
         request.setStore(store);
         return this;
     }
 
     public AddSpendingRequestBuilder withStoreName(String name) {
-        store.setName(name);
+        storeDetails.setName(name);
+        store.setDetails(storeDetails);
         request.setStore(store);
         return this;
     }
 
     public AddSpendingRequestBuilder withStoreCity(String city) {
         storeAddress.setCity(city);
-        store.setAddress(storeAddress);
+        storeDetails.setAddress(storeAddress);
+        store.setDetails(storeDetails);
         request.setStore(store);
         return this;
     }
 
     public AddSpendingRequestBuilder withStoreReference(int reference) {
-        storeReference.setId(String.valueOf(reference));
-        request.setStore(storeReference);
+        store.setReference(new JsonStoreReference(String.valueOf(reference)));
+        request.setStore(store);
         return this;
     }
 

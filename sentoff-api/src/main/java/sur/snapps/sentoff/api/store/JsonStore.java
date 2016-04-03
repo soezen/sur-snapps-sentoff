@@ -1,43 +1,50 @@
 package sur.snapps.sentoff.api.store;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.AssertTrue;
 
 /**
  * @author sur
  * @since 30/03/2016
  */
-public class JsonStore implements JStore {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class JsonStore {
 
-    @NotNull
-    private String name;
+    @Valid
+    @JsonProperty("store")
+    private JsonStoreDetails details;
 
-    @NotNull @Valid
-    private JsonAddress address;
+    @Valid
+    @JsonProperty("store_ref")
+    private JsonStoreReference reference;
 
-    private String type;
-
-    public String getName() {
-        return name;
+    @JsonIgnore
+    @AssertTrue(message = "store.id cannot be combined with store details")
+    public boolean isValid() {
+        return details == null || reference == null;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public JsonStoreDetails getDetails() {
+        return details;
     }
 
-    public JsonAddress getAddress() {
-        return address;
+    public void setDetails(JsonStoreDetails details) {
+        this.details = details;
     }
 
-    public void setAddress(JsonAddress address) {
-        this.address = address;
+    public JsonStoreReference getReference() {
+        return reference;
     }
 
-    public String getType() {
-        return type;
+    public void setReference(JsonStoreReference reference) {
+        this.reference = reference;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+    // TODO remove this class and put everything in request itself
+    // TODO create annotation on classlevel to validate XOR
+    // TODO create abstract Json object to catch any extra properties and generate warnings
 }

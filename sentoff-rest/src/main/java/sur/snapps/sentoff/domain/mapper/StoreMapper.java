@@ -2,7 +2,7 @@ package sur.snapps.sentoff.domain.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sur.snapps.sentoff.api.store.JsonStore;
+import sur.snapps.sentoff.api.store.JsonStoreDetails;
 import sur.snapps.sentoff.domain.Store;
 import sur.snapps.sentoff.rest.util.TypeConverter;
 
@@ -16,7 +16,7 @@ public class StoreMapper {
     @Autowired
     private TypeConverter typeConverter;
 
-    public Store map(JsonStore jsonStore) {
+    public Store map(JsonStoreDetails jsonStore) {
         if (jsonStore == null) {
             return null;
         }

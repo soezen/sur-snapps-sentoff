@@ -1,7 +1,7 @@
 {
   "date" : 1459107507525,
   "amount" : 12.23,
-  "store" : { "type": "details", "name": "Colruyt", "address": { "city": "Harelbeke" }},
+  "store" : { "type": "WAREHOUSE", "name": "Colruyt", "address": { "city": "Harelbeke" }},
   "payments": [
     { "accountId": 1, "amount": 10.23 },
     { "accountId": 2, "amount": 2 }],

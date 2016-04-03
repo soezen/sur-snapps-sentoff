@@ -1,26 +1,13 @@
 package sur.snapps.sentoff.rest.test;
 
 import com.google.common.io.Resources;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import sur.snapps.sentoff.api.spending.AddSpendingResponse;
-import sur.snapps.sentoff.domain.Store;
-import sur.snapps.sentoff.domain.StoreLocation;
-import sur.snapps.sentoff.domain.StoreType;
-import sur.snapps.sentoff.domain.repo.StoreLocationRepository;
-import sur.snapps.sentoff.domain.repo.StoreRepository;
-import sur.snapps.sentoff.domain.repo.Table;
 import sur.snapps.sentoff.domain.table.Tables;
 import sur.snapps.sentoff.rest.test.assertion.AddSpendingResponseAssertion;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-
-import static org.junit.Assert.assertEquals;
-import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTable;
 
 /**
  * @author rogge
@@ -30,56 +17,56 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
 
     private static final String JSON_FOLDER = "sur/snapps/sentoff/rest/test/json/add_spending/";
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private StoreLocationRepository storeLocationRepository;
-
-    @Before
-    public void clearTables() {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, Tables.PURCHASES.getTableName());
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, Tables.STORE_LOCATIONS.getTableName());
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, Tables.STORES.getTableName());
-    }
-
     @Test
     public void success_minimalRequest() throws Exception {
-        postAddSpendingRequest("minimal.json")
-                .assertSuccess();
+        Number id = postAddSpendingRequest("minimal.json")
+                .assertSuccess()
+                .getSpendingId();
 
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseTable(Tables.PURCHASES)
+                .hasNumberOfRows(1)
+                .existsRowWithValues(id, "date", "2016-03-27")
+                .existsRowWithValues(id, "amount", "12.23");
     }
 
     @Test
     public void success_withStoreReference() throws Exception {
-        Store store = new Store();
-        store.setName("Colruyt");
-        store.setType(StoreType.WAREHOUSE);
-        StoreLocation storeLocation = new StoreLocation();
-        storeLocation.setName("Colruyt Harelbeke");
-        storeLocation.setCity("Harelbeke");
-        storeLocation.setCountry("BE");
-        storeLocation.setStore(store);
-        storeLocation.setId(1);
-        storeLocationRepository.addStoreLocation(storeLocation);
+        insertStoreLocationWithId(1);
 
-        postAddSpendingRequest("store_reference.json")
-                .assertSuccess();
+        Number id = postAddSpendingRequest("store_reference.json")
+                .assertSuccess()
+                .getSpendingId();
 
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.STORES.getTableName()));
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.STORE_LOCATIONS.getTableName()));
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseTable(Tables.PURCHASES)
+                .hasNumberOfRows(1)
+                .existsRowWithValues(id, "date", "2016-03-27")
+                .existsRowWithValues(id, "amount", "12.23")
+                .existsRowWithValues(id, "store_location_id", "1");
+        assertDatabaseTable(Tables.STORE_LOCATIONS).hasNumberOfRows(1);
+        assertDatabaseTable(Tables.STORES).hasNumberOfRows(1);
     }
 
     @Test
     public void success_maximalRequest() throws Exception {
-        postAddSpendingRequest("maximal.json")
-            .assertSuccess();
+        Number id = postAddSpendingRequest("maximal.json")
+                .assertSuccess()
+                .getSpendingId();
 
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.STORES.getTableName()));
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.STORE_LOCATIONS.getTableName()));
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseTable(Tables.PURCHASES)
+                .hasNumberOfRows(1)
+                .existsRowWithValues(id, "date", "2016-03-27")
+                .existsRowWithValues(id, "amount", "12.23")
+                .existsRowWithValues(id, "store_location_id", "1");
+        assertDatabaseTable(Tables.STORE_LOCATIONS)
+                .hasNumberOfRows(1)
+                .existsRowWithValues(1, "name", "Colruyt Harelbeke")
+                .existsRowWithValues(1, "city", "Harelbeke")
+                .existsRowWithValues(1, "country", "BE")
+                .existsRowWithValues(1, "store_id", "1");
+        assertDatabaseTable(Tables.STORES)
+                .hasNumberOfRows(1)
+                .existsRowWithValues(1, "name", "Colruyt")
+                .existsRowWithValues(1, "type", "WAREHOUSE");
     }
 
     @Test
@@ -88,7 +75,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
                 .assertFailure()
                 .assertErrorOnField("date", "not_null");
 
-        assertEquals(0, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseEmpty();
     }
 
     @Test
@@ -97,7 +84,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
                 .assertFailure()
                 .assertErrorOnField("date", "not_null");
 
-        assertEquals(0, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseEmpty();
     }
 
     @Test
@@ -106,7 +93,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
                 .assertFailure()
                 .assertErrorOnField("date", "invalid_format");
 
-        assertEquals(0, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseEmpty();
     }
 
     @Test
@@ -115,7 +102,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
                 .assertFailure()
                 .assertErrorOnField("amount", "not_null");
 
-        assertEquals(0, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseEmpty();
     }
 
     @Test
@@ -124,7 +111,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
                 .assertFailure()
                 .assertErrorOnField("amount", "not_null");
 
-        assertEquals(0, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseEmpty();
     }
 
     @Test
@@ -133,7 +120,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
                 .assertFailure()
                 .assertErrorOnField("amount", "invalid_format");
 
-        assertEquals(0, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseEmpty();
     }
 
     @Test
@@ -143,7 +130,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
                 .assertErrorOnField("date", "not_null")
                 .assertErrorOnField("amount", "not_null");
 
-        assertEquals(0, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseEmpty();
     }
 
     @Test
@@ -153,7 +140,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
                 .assertErrorOnField("date", "not_null")
                 .assertErrorOnField("amount", "not_null");
 
-        assertEquals(0, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseEmpty();
     }
 
     @Test
@@ -163,7 +150,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
                 .assertErrorOnField("date", "invalid_format")
                 .assertErrorOnField("amount", "invalid_format");
 
-        assertEquals(0, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseEmpty();
     }
 
     private AddSpendingResponseAssertion postAddSpendingRequest(String fileName) throws IOException {

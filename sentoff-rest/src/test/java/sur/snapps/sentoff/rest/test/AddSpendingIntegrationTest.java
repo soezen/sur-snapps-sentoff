@@ -1,5 +1,6 @@
 package sur.snapps.sentoff.rest.test;
 
+import io.swagger.util.Json;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
 import sur.snapps.sentoff.api.spending.AddSpendingResponse;
+import sur.snapps.sentoff.api.store.JsonAddress;
+import sur.snapps.sentoff.api.store.JsonStore;
+import sur.snapps.sentoff.api.store.JsonStoreDetails;
+import sur.snapps.sentoff.api.store.JsonStoreReference;
 import sur.snapps.sentoff.domain.repo.Table;
 import sur.snapps.sentoff.domain.table.Tables;
 import sur.snapps.sentoff.rest.test.assertion.AddSpendingResponseAssertion;
@@ -51,12 +56,17 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
         AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest()
                 .withStoreReference(1)
                 .build();
-        postAddSpendingRequest(request)
-                .assertSuccess();
+        Number id = postAddSpendingRequest(request)
+                .assertSuccess()
+                .getSpendingId();
 
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.STORES.getTableName()));
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.STORE_LOCATIONS.getTableName()));
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
+        assertDatabaseTable(Tables.PURCHASES)
+                .hasNumberOfRows(1)
+                .existsRowWithValues(id, "date", request.getDate())
+                .existsRowWithValues(id, "amount", request.getAmount())
+                .existsRowWithValues(id, "store_location_id", request.getStore().getReference().getId());
+        assertDatabaseTable(Tables.STORE_LOCATIONS).hasNumberOfRows(1);
+        assertDatabaseTable(Tables.STORES).hasNumberOfRows(1);
     }
 
     @Test
@@ -64,12 +74,33 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
         AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest()
                 .withStoreName("Colruyt")
                 .withStoreCity("Harelbeke").build();
-        postAddSpendingRequest(request)
-                .assertSuccess();
+        Number id = postAddSpendingRequest(request)
+                .assertSuccess()
+                .getSpendingId();
+        Number storeLocationId = 1;
+        Number storeId = 1;
 
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.PURCHASES.getTableName()));
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.STORE_LOCATIONS.getTableName()));
-        assertEquals(1, countRowsInTable(jdbcTemplate, Tables.STORES.getTableName()));
+        assertDatabaseTable(Tables.PURCHASES)
+                .hasNumberOfRows(1)
+                .existsRowWithValues(id, "date", request.getDate())
+                .existsRowWithValues(id, "amount", request.getAmount())
+                .existsRowWithValues(id, "store_location_id", storeLocationId.toString());
+
+        JsonStoreDetails store = request.getStore().getDetails();
+        JsonAddress address = store.getAddress();
+        assertDatabaseTable(Tables.STORE_LOCATIONS)
+                .hasNumberOfRows(1)
+                .existsRowWithValues(storeLocationId, "name", store.getName() + " " + address.getCity())
+                .existsRowWithValues(storeLocationId, "street", address.getStreet())
+                .existsRowWithValues(storeLocationId, "number", address.getNumber())
+                .existsRowWithValues(storeLocationId, "zip_code", address.getZipCode())
+                .existsRowWithValues(storeLocationId, "city", address.getCity())
+                .existsRowWithValues(storeLocationId, "country", address.getCountry())
+                .existsRowWithValues(storeLocationId, "store_id", storeId.toString());
+        assertDatabaseTable(Tables.STORES)
+                .hasNumberOfRows(1)
+                .existsRowWithValues(storeId, "name", store.getName())
+                .existsRowWithValues(storeId, "type", store.getType());
     }
 
     @Test
@@ -78,6 +109,8 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
         postAddSpendingRequest(request)
                 .assertFailure()
                 .assertErrorOnField("date", "not_null");
+
+        assertDatabaseEmpty();
     }
 
     @Test
@@ -86,6 +119,8 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
         postAddSpendingRequest(request)
                 .assertFailure()
                 .assertErrorOnField("amount", "not_null");
+
+        assertDatabaseEmpty();
     }
 
     @Test
@@ -98,6 +133,8 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
                 .assertFailure()
                 .assertErrorOnField("date", "not_null")
                 .assertErrorOnField("amount", "not_null");
+
+        assertDatabaseEmpty();
     }
 
     private AddSpendingResponseAssertion postAddSpendingRequest(AddSpendingRequest request) {
