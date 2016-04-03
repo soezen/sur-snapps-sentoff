@@ -1,13 +1,13 @@
 package sur.snapps.sentoff.api.spending;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import sur.snapps.sentoff.api.store.JStore;
+import sur.snapps.sentoff.api.store.JsonStore;
 import sur.snapps.sentoff.api.validation.AmountValue;
 import sur.snapps.sentoff.api.validation.DateValue;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class AddSpendingRequest {
     private String amount;
 
     @Valid
-    private Store store;
+    private JStore store;
 
     @Valid
     private List<Payment> payments = Collections.emptyList();
@@ -42,7 +42,7 @@ public class AddSpendingRequest {
         this.date = date;
     }
 
-    public void setStore(Store store) {
+    public void setStore(JStore store) {
         this.store = store;
     }
 
@@ -54,7 +54,7 @@ public class AddSpendingRequest {
         return date;
     }
 
-    public Store getStore() {
+    public JStore getStore() {
         return store;
     }
 

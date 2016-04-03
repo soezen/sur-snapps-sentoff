@@ -1,7 +1,9 @@
 package sur.snapps.sentoff.api.test.spending.builder;
 
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
-import sur.snapps.sentoff.api.spending.Store;
+import sur.snapps.sentoff.api.store.JsonAddress;
+import sur.snapps.sentoff.api.store.JsonStore;
+import sur.snapps.sentoff.api.store.JsonStoreReference;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,11 +15,15 @@ import java.util.Date;
 public class AddSpendingRequestBuilder {
 
     private AddSpendingRequest request;
-    private Store store;
+    private JsonStore store;
+    private JsonStoreReference storeReference;
+    private JsonAddress storeAddress;
 
     private AddSpendingRequestBuilder() {
         request = new AddSpendingRequest();
-        store = new Store();
+        store = new JsonStore();
+        storeReference = new JsonStoreReference();
+        storeAddress = new JsonAddress();
     }
 
     /**
@@ -39,8 +45,8 @@ public class AddSpendingRequestBuilder {
         return this;
     }
 
-    public AddSpendingRequestBuilder withStoreLocation(String location) {
-        store.setLocation(location);
+    public AddSpendingRequestBuilder withStoreType(String type) {
+        store.setType(type);
         request.setStore(store);
         return this;
     }
@@ -48,6 +54,19 @@ public class AddSpendingRequestBuilder {
     public AddSpendingRequestBuilder withStoreName(String name) {
         store.setName(name);
         request.setStore(store);
+        return this;
+    }
+
+    public AddSpendingRequestBuilder withStoreCity(String city) {
+        storeAddress.setCity(city);
+        store.setAddress(storeAddress);
+        request.setStore(store);
+        return this;
+    }
+
+    public AddSpendingRequestBuilder withStoreReference(int reference) {
+        storeReference.setId(String.valueOf(reference));
+        request.setStore(storeReference);
         return this;
     }
 

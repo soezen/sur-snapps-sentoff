@@ -1,0 +1,8 @@
+{
+  "date" : 1459107507525,
+  "amount" : 12.23,
+  "store": {
+    "type": "reference",
+    "id": 1
+  }
+}

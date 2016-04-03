@@ -16,10 +16,14 @@ public class SpendingMapper {
     @Autowired
     private TypeConverter typeConverter;
 
+    @Autowired
+    private StoreLocationMapper storeLocationMapper;
+
     public Spending map(AddSpendingRequest request) {
         Spending spending = new Spending();
         spending.setDate(typeConverter.toDate(request.getDate()));
         spending.setAmount(typeConverter.toBigDecimal(request.getAmount()));
+        spending.setStoreLocation(storeLocationMapper.map(request.getStore()));
         return spending;
     }
 }

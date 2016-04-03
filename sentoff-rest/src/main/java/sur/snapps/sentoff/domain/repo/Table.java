@@ -12,5 +12,4 @@ public interface Table<T extends Row> {
 
     Map<String, Object> getInsertValues(T row);
 
-    <D extends Row> Map<Table<D>, D> getDependencies(T row);
 }

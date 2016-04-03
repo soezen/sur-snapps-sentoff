@@ -4,6 +4,7 @@ import sur.snapps.sentoff.domain.StoreLocation;
 import sur.snapps.sentoff.domain.repo.Row;
 import sur.snapps.sentoff.domain.repo.Table;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -19,11 +20,11 @@ public class StoreLocationsTable implements Table<StoreLocation> {
 
     @Override
     public Map<String, Object> getInsertValues(StoreLocation row) {
-        return null;
-    }
-
-    @Override
-    public <D extends Row> Map<Table<D>, D> getDependencies(StoreLocation row) {
-        return null;
+        Map<String, Object> values = new HashMap<>();
+        values.put("store_id", row.getStoreId());
+        values.put("name", row.getName());
+        values.put("city", row.getCity());
+        values.put("country", row.getCountry());
+        return values;
     }
 }
