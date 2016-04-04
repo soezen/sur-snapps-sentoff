@@ -1,25 +1,21 @@
 package sur.snapps.sentoff.rest;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.google.common.base.CaseFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import sur.snapps.sentoff.api.RestResponse;
-import sur.snapps.sentoff.api.error.Error;
-import sur.snapps.sentoff.api.error.FieldError;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.google.common.base.CaseFormat;
+
+import sur.snapps.sentoff.api.RestResponse;
+import sur.snapps.sentoff.api.error.Error;
+import sur.snapps.sentoff.api.error.FieldError;
 
 /**
  * @author rogge
