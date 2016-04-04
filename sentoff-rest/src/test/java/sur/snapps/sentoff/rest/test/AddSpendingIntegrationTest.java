@@ -1,6 +1,5 @@
 package sur.snapps.sentoff.rest.test;
 
-import io.swagger.util.Json;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +8,10 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
 import sur.snapps.sentoff.api.spending.AddSpendingResponse;
 import sur.snapps.sentoff.api.store.JsonAddress;
-import sur.snapps.sentoff.api.store.JsonStore;
 import sur.snapps.sentoff.api.store.JsonStoreDetails;
-import sur.snapps.sentoff.api.store.JsonStoreReference;
-import sur.snapps.sentoff.domain.repo.Table;
+import sur.snapps.sentoff.api.test.spending.builder.AddSpendingRequestBuilder;
 import sur.snapps.sentoff.domain.table.Tables;
 import sur.snapps.sentoff.rest.test.assertion.AddSpendingResponseAssertion;
-import sur.snapps.sentoff.api.test.spending.builder.AddSpendingRequestBuilder;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTable;
@@ -64,7 +57,7 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
                 .hasNumberOfRows(1)
                 .existsRowWithValues(id, "date", request.getDate())
                 .existsRowWithValues(id, "amount", request.getAmount())
-                .existsRowWithValues(id, "store_location_id", request.getStore().getReference().getId());
+                .existsRowWithValues(id, "store_location_id", request.getStoreReference().getId());
         assertDatabaseTable(Tables.STORE_LOCATIONS).hasNumberOfRows(1);
         assertDatabaseTable(Tables.STORES).hasNumberOfRows(1);
     }
@@ -86,7 +79,7 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
                 .existsRowWithValues(id, "amount", request.getAmount())
                 .existsRowWithValues(id, "store_location_id", storeLocationId.toString());
 
-        JsonStoreDetails store = request.getStore().getDetails();
+        JsonStoreDetails store = request.getStoreDetails();
         JsonAddress address = store.getAddress();
         assertDatabaseTable(Tables.STORE_LOCATIONS)
                 .hasNumberOfRows(1)

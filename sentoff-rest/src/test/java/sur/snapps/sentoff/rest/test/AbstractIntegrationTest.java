@@ -80,7 +80,7 @@ public abstract class AbstractIntegrationTest {
         storeLocation.setCity("Harelbeke");
         storeLocation.setCountry("BE");
         storeLocation.setStore(store);
-        storeLocation.setId(1);
+        storeLocation.setId(id);
         storeLocationRepository.addStoreLocation(storeLocation);
     }
 

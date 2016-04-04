@@ -23,7 +23,7 @@ public class SpendingMapper {
         Spending spending = new Spending();
         spending.setDate(typeConverter.toDate(request.getDate()));
         spending.setAmount(typeConverter.toBigDecimal(request.getAmount()));
-        spending.setStoreLocation(storeLocationMapper.map(request.getStore()));
+        spending.setStoreLocation(storeLocationMapper.map(request.getStoreDetails(), request.getStoreReference()));
         return spending;
     }
 }

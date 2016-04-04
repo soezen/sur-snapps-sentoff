@@ -31,10 +31,17 @@ public abstract class AbstractRepository extends NamedParameterJdbcDaoSupport {
         }
 
         Number into(Table<T> table) {
-            insert.withTableName(table.getTableName())
-                    .usingGeneratedKeyColumns("id");
+            System.out.println("INSERTING record into " + table.getTableName());
+            Number key = row.getId();
+            if (key == null) {
+                insert.withTableName(table.getTableName()).usingGeneratedKeyColumns("id");
 
-            return insert.executeAndReturnKey(table.getInsertValues(row));
+                key = insert.executeAndReturnKey(table.getInsertValues(row));
+            } else {
+                insert.withTableName(table.getTableName()).execute(table.getInsertValues(row));
+            }
+            System.out.println(" > " + key);
+            return key;
         }
     }
 }

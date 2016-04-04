@@ -2,8 +2,8 @@ package sur.snapps.sentoff.api.spending;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import sur.snapps.sentoff.api.store.JsonStore;
+import sur.snapps.sentoff.api.store.JsonStoreDetails;
+import sur.snapps.sentoff.api.JsonReference;
 import sur.snapps.sentoff.api.validation.AmountValue;
 import sur.snapps.sentoff.api.validation.DateValue;
 
@@ -27,8 +27,12 @@ public class AddSpendingRequest {
     private String amount;
 
     @Valid
-    @JsonUnwrapped
-    private JsonStore store;
+    @JsonProperty("store")
+    private JsonStoreDetails storeDetails;
+
+    @Valid
+    @JsonProperty("storeRef")
+    private JsonReference storeReference;
 
     @Valid
     private List<Payment> payments = Collections.emptyList();
@@ -45,21 +49,12 @@ public class AddSpendingRequest {
         this.date = date;
     }
 
-    public void setStore(JsonStore store) {
-        System.out.println("SETTING store : " + (store.getDetails() == null));
-        this.store = store;
-    }
-
     public String getAmount() {
         return amount;
     }
 
     public String getDate() {
         return date;
-    }
-
-    public JsonStore getStore() {
-        return store;
     }
 
     public List<Payment> getPayments() {
@@ -78,4 +73,19 @@ public class AddSpendingRequest {
         purchasedProducts.add(purchasedProduct);
     }
 
+    public JsonStoreDetails getStoreDetails() {
+        return storeDetails;
+    }
+
+    public void setStoreDetails(JsonStoreDetails storeDetails) {
+        this.storeDetails = storeDetails;
+    }
+
+    public JsonReference getStoreReference() {
+        return storeReference;
+    }
+
+    public void setStoreReference(JsonReference storeReference) {
+        this.storeReference = storeReference;
+    }
 }

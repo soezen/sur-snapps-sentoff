@@ -6,4 +6,5 @@ package sur.snapps.sentoff.domain.repo;
  */
 public interface Row {
 
+    Number getId();
 }

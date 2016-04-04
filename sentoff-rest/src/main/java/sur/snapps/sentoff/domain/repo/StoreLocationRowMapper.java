@@ -18,9 +18,9 @@ public class StoreLocationRowMapper implements RowMapper<StoreLocation> {
     @Override
     public StoreLocation mapRow(ResultSet rs, int i) throws SQLException {
         Store store = new Store();
-        store.setId(rs.getInt("STORE_ID"));
+        store.setId(rs.getInt("s.id"));
         StoreLocation storeLocation = new StoreLocation();
-        storeLocation.setId(rs.getInt("ID"));
+        storeLocation.setId(rs.getInt("sl.id"));
         storeLocation.setStore(store);
         return storeLocation;
     }
