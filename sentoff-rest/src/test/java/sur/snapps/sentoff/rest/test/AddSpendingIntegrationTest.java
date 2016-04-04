@@ -25,14 +25,6 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Before
-    public void clearDatabase() {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate,
-                Tables.PURCHASES.getTableName(),
-                Tables.STORE_LOCATIONS.getTableName(),
-                Tables.STORES.getTableName());
-    }
-
     @Test
     public void success_minimalRequest() {
         AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest().build();
@@ -46,6 +38,8 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void success_withStoreReference() {
+        insertStoreLocationWithId(1);
+
         AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest()
                 .withStoreReference(1)
                 .build();
@@ -55,8 +49,8 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
 
         assertDatabaseTable(Tables.PURCHASES)
                 .hasNumberOfRows(1)
-                .existsRowWithValues(id, "date", request.getDate())
-                .existsRowWithValues(id, "amount", request.getAmount())
+                .existsRowWithValues(id, "date", "1970-01-01")
+                .existsRowWithValues(id, "amount", "1.00")
                 .existsRowWithValues(id, "store_location_id", request.getStoreReference().getId());
         assertDatabaseTable(Tables.STORE_LOCATIONS).hasNumberOfRows(1);
         assertDatabaseTable(Tables.STORES).hasNumberOfRows(1);
@@ -75,8 +69,8 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
 
         assertDatabaseTable(Tables.PURCHASES)
                 .hasNumberOfRows(1)
-                .existsRowWithValues(id, "date", request.getDate())
-                .existsRowWithValues(id, "amount", request.getAmount())
+                .existsRowWithValues(id, "date", "1970-01-01")
+                .existsRowWithValues(id, "amount", "1.00")
                 .existsRowWithValues(id, "store_location_id", storeLocationId.toString());
 
         JsonStoreDetails store = request.getStoreDetails();

@@ -39,10 +39,6 @@ public class StoreLocationMapper {
             return storeLocation;
         }
         Number storeId = typeConverter.toInteger(storeReference.getId());
-        System.out.println("finding storeLocation " + storeId);
-
-        StoreLocation storeLocation = storeLocationRepository.findById(storeId);
-        System.out.println("found storeLocation " + storeLocation.getId());
-        return storeLocation;
+        return storeLocationRepository.findById(storeId);
     }
 }
