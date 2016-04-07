@@ -2,9 +2,9 @@ package sur.snapps.sentoff.rest.test;
 
 import com.google.common.io.Resources;
 import org.junit.Test;
-import sur.snapps.sentoff.api.spending.AddSpendingResponse;
+import sur.snapps.sentoff.api.response.RestResponse;
 import sur.snapps.sentoff.domain.table.Tables;
-import sur.snapps.sentoff.rest.test.assertion.AddSpendingResponseAssertion;
+import sur.snapps.sentoff.rest.test.assertion.RestResponseAssertion;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -21,7 +21,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
     public void success_minimalRequest() throws Exception {
         Number id = postAddSpendingRequest("minimal.json")
                 .assertSuccess()
-                .getSpendingId();
+                .getGeneratedId();
 
         assertDatabaseTable(Tables.PURCHASES)
                 .hasNumberOfRows(1)
@@ -35,7 +35,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
 
         Number id = postAddSpendingRequest("store_reference.json")
                 .assertSuccess()
-                .getSpendingId();
+                .getGeneratedId();
 
         assertDatabaseTable(Tables.PURCHASES)
                 .hasNumberOfRows(1)
@@ -50,7 +50,7 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
     public void success_maximalRequest() throws Exception {
         Number id = postAddSpendingRequest("maximal.json")
                 .assertSuccess()
-                .getSpendingId();
+                .getGeneratedId();
 
         assertDatabaseTable(Tables.PURCHASES)
                 .hasNumberOfRows(1)
@@ -153,9 +153,9 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
         assertDatabaseEmpty();
     }
 
-    private AddSpendingResponseAssertion postAddSpendingRequest(String fileName) throws IOException {
+    private RestResponseAssertion postAddSpendingRequest(String fileName) throws IOException {
         String fileContent = Resources.toString(Resources.getResource(JSON_FOLDER + fileName), Charset.defaultCharset());
-        AddSpendingResponse response = postJson("/spending/add", AddSpendingResponse.class, fileContent);
-        return new AddSpendingResponseAssertion(response);
+        RestResponse response = postJson("/spending/add", fileContent);
+        return new RestResponseAssertion(response);
     }
 }

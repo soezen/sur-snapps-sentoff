@@ -2,9 +2,13 @@ package sur.snapps.sentoff.rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import sur.snapps.sentoff.api.response.RestResponse;
+import sur.snapps.sentoff.api.response.SuccessResponse;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
-import sur.snapps.sentoff.api.spending.AddSpendingResponse;
 import sur.snapps.sentoff.domain.Spending;
 import sur.snapps.sentoff.domain.mapper.SpendingMapper;
 import sur.snapps.sentoff.domain.repo.SpendingRepository;
@@ -28,15 +32,12 @@ public class SpendingController extends AbstractRestController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public AddSpendingResponse addSpending(
+    public RestResponse addSpending(
             @RequestBody @Valid AddSpendingRequest request) {
 
         Spending spending = spendingMapper.map(request);
         spendingRepository.addSpending(spending);
 
-        AddSpendingResponse response = new AddSpendingResponse();
-        response.setRequest(request);
-        response.setId(spending.getId());
-        return response;
+        return new SuccessResponse(spending.getId());
     }
 }

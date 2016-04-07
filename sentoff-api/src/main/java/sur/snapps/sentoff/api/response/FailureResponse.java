@@ -1,7 +1,5 @@
-package sur.snapps.sentoff.api;
+package sur.snapps.sentoff.api.response;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import sur.snapps.sentoff.api.error.Error;
 
 import java.util.ArrayList;
@@ -9,17 +7,20 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author rogge
- * @since 27/03/2016.
+ * @author sur
+ * @since 05/04/2016
  */
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RestResponse {
+public class FailureResponse extends RestResponse {
+
 
     private List<Error> errors = new ArrayList<>();
 
-    public RestResponse() { }
+    public FailureResponse() {
+        super(ResponseStatus.FAILURE);
+    }
 
-    public RestResponse(List<Error> errors) {
+    public FailureResponse(List<Error> errors) {
+        super(ResponseStatus.FAILURE);
         this.errors = errors;
     }
 
@@ -27,9 +28,6 @@ public class RestResponse {
         return Collections.unmodifiableList(errors);
     }
 
-    public boolean hasErrors() {
-        return errors != null && !errors.isEmpty();
-    }
 
     public boolean hasErrorOnField(String field) {
         return getFieldError(field) != null;

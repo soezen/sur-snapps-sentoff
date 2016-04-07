@@ -7,11 +7,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import sur.snapps.sentoff.api.response.RestResponse;
 import sur.snapps.sentoff.domain.Store;
 import sur.snapps.sentoff.domain.StoreLocation;
 import sur.snapps.sentoff.domain.StoreType;
@@ -47,19 +52,24 @@ public abstract class AbstractIntegrationTest {
 
     @Before
     public void clearTables() {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, Tables.PURCHASES.getTableName());
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, Tables.STORE_LOCATIONS.getTableName());
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, Tables.STORES.getTableName());
+        clearTable(Tables.PURCHASES);
+        clearTable(Tables.STORE_LOCATIONS);
+        clearTable(Tables.STORES);
     }
 
-    protected <T> T postJson(final String requestMappingUrl, final Class<T> returnType, Object body) {
+    public void clearTable(Table<?> table) {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, table.getTableName());
+        jdbcTemplate.execute("alter table " + table.getTableName() + " alter column id restart with 1");
+    }
+
+    protected RestResponse postJson(final String requestMappingUrl, Object body) {
         final TestRestTemplate template = new TestRestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         final HttpEntity<Object> requestEntity = new HttpEntity<>(body, headers);
 
         try {
-            final ResponseEntity<T> entity = template.exchange(getBaseUrl() + requestMappingUrl, HttpMethod.POST, requestEntity, returnType);
+            final ResponseEntity<RestResponse> entity = template.exchange(getBaseUrl() + requestMappingUrl, HttpMethod.POST, requestEntity, RestResponse.class);
             return entity.getBody();
         } catch (final Exception e) {
             e.printStackTrace();

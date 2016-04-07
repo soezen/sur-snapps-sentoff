@@ -1,17 +1,15 @@
 package sur.snapps.sentoff.rest.test;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.jdbc.JdbcTestUtils;
+import sur.snapps.sentoff.api.response.RestResponse;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
-import sur.snapps.sentoff.api.spending.AddSpendingResponse;
 import sur.snapps.sentoff.api.store.JsonAddress;
 import sur.snapps.sentoff.api.store.JsonStoreDetails;
 import sur.snapps.sentoff.api.test.spending.builder.AddSpendingRequestBuilder;
 import sur.snapps.sentoff.domain.table.Tables;
-import sur.snapps.sentoff.rest.test.assertion.AddSpendingResponseAssertion;
+import sur.snapps.sentoff.rest.test.assertion.RestResponseAssertion;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTable;
@@ -45,7 +43,7 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
                 .build();
         Number id = postAddSpendingRequest(request)
                 .assertSuccess()
-                .getSpendingId();
+                .getGeneratedId();
 
         assertDatabaseTable(Tables.PURCHASES)
                 .hasNumberOfRows(1)
@@ -63,7 +61,7 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
                 .withStoreCity("Harelbeke").build();
         Number id = postAddSpendingRequest(request)
                 .assertSuccess()
-                .getSpendingId();
+                .getGeneratedId();
         Number storeLocationId = 1;
         Number storeId = 1;
 
@@ -124,8 +122,8 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
         assertDatabaseEmpty();
     }
 
-    private AddSpendingResponseAssertion postAddSpendingRequest(AddSpendingRequest request) {
-        AddSpendingResponse response = postJson("/spending/add", AddSpendingResponse.class, request);
-        return new AddSpendingResponseAssertion(response);
+    private RestResponseAssertion postAddSpendingRequest(AddSpendingRequest request) {
+        RestResponse response = postJson("/spending/add", request);
+        return new RestResponseAssertion(response);
     }
 }

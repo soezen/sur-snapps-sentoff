@@ -7,13 +7,14 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sur.snapps.sentoff.api.RestResponse;
 import sur.snapps.sentoff.api.error.Error;
 import sur.snapps.sentoff.api.error.FieldError;
+import sur.snapps.sentoff.api.response.ErrorResponse;
+import sur.snapps.sentoff.api.response.FailureResponse;
+import sur.snapps.sentoff.api.response.RestResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -27,14 +28,14 @@ public abstract class AbstractRestController {
     public RestResponse handleGeneralException(Exception ex) {
         List<Error> errors = new ArrayList<>();
         errors.add(createError(ex));
-        return new RestResponse(errors);
+        return new ErrorResponse(errors);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public RestResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        List<Error> errors = ex.getBindingResult().getFieldErrors().stream().map((Function<org.springframework.validation.FieldError, Error>) this::createError).collect(Collectors.toList());
-        return new RestResponse(errors);
+        List<Error> errors = ex.getBindingResult().getFieldErrors().stream().map(this::createError).collect(Collectors.toList());
+        return new FailureResponse(errors);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -47,7 +48,7 @@ public abstract class AbstractRestController {
         } else {
             return handleGeneralException(ex);
         }
-        return new RestResponse(errors);
+        return new FailureResponse(errors);
     }
 
     private Error createError(org.springframework.validation.FieldError fieldError) {
