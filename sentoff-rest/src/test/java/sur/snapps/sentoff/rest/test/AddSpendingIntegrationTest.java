@@ -3,6 +3,7 @@ package sur.snapps.sentoff.rest.test;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import sur.snapps.sentoff.api.response.MessageType;
 import sur.snapps.sentoff.api.response.RestResponse;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
 import sur.snapps.sentoff.api.store.JsonAddress;
@@ -10,6 +11,7 @@ import sur.snapps.sentoff.api.store.JsonStoreDetails;
 import sur.snapps.sentoff.api.test.spending.builder.AddSpendingRequestBuilder;
 import sur.snapps.sentoff.domain.table.Tables;
 import sur.snapps.sentoff.rest.test.assertion.RestResponseAssertion;
+import sur.snapps.sentoff.rest.test.mother.StoreLocationMother;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTable;
@@ -96,6 +98,23 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
                 .assertErrorOnField("date", "not_null");
 
         assertDatabaseEmpty();
+    }
+
+    @Test
+    public void success_duplicateStoreMessage() {
+        insertStoreLocation(StoreLocationMother.colruytDeerlijk());
+
+        AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest()
+                .withStoreName("Colruyt")
+                .withStoreCity("Deerlijk")
+                .build();
+        postAddSpendingRequest(request)
+                .assertSuccess()
+                .assertMessage(MessageType.DUPLICATE_STORE_LOCATION, "store");
+
+        assertDatabaseTable(Tables.PURCHASES).hasNumberOfRows(1);
+        assertDatabaseTable(Tables.STORE_LOCATIONS).hasNumberOfRows(2);
+        assertDatabaseTable(Tables.STORES).hasNumberOfRows(2);
     }
 
     @Test

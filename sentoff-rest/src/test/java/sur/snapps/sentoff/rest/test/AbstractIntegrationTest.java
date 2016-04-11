@@ -94,6 +94,10 @@ public abstract class AbstractIntegrationTest {
         storeLocationRepository.addStoreLocation(storeLocation);
     }
 
+    protected void insertStoreLocation(StoreLocation storeLocation) {
+        storeLocationRepository.addStoreLocation(storeLocation);
+    }
+
     protected void assertDatabaseEmpty() {
         assertDatabaseTable(Tables.PURCHASES).hasNumberOfRows(0);
         assertDatabaseTable(Tables.STORE_LOCATIONS).hasNumberOfRows(0);

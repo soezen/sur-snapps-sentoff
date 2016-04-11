@@ -18,17 +18,27 @@ public class SuccessResponse extends RestResponse {
         super(ResponseStatus.SUCCESS);
     }
 
-    public SuccessResponse(Number generatedId) {
+    public SuccessResponse(List<JsonMessage> messages) {
         super(ResponseStatus.SUCCESS);
-        addMessage(MessageType.GENERATED_ID, "id", generatedId.toString());
-    }
-
-    public void addMessage(MessageType type, String field, String message) {
-        messages.add(new JsonMessage(type, field, message));
+        this.messages = messages;
     }
 
     public List<JsonMessage> getMessages() {
         return Collections.unmodifiableList(messages);
+    }
+
+    public boolean hasMessages() {
+        return !messages.isEmpty();
+    }
+
+    public String getFieldMessage(String field, MessageType type) {
+        for (JsonMessage message : messages) {
+            if (message.getField().equals(field)
+                    && message.getType().equals(type)) {
+                return message.getMessage();
+            }
+        }
+        return null;
     }
 
     @JsonIgnore
