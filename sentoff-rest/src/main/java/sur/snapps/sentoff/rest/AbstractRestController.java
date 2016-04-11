@@ -53,9 +53,12 @@ public abstract class AbstractRestController {
 
     private Error createError(org.springframework.validation.FieldError fieldError) {
         String code = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldError.getCode());
+        // TODO refactor this
         if ("date_value".equals(code)
             || "amount_value".equals(code)) {
             code = "invalid_format";
+        } else if ("present_in_d_b".equals(code)) {
+            code = "reference_not_found";
         }
         return new FieldError(code, fieldError.getField(), fieldError.getDefaultMessage());
     }

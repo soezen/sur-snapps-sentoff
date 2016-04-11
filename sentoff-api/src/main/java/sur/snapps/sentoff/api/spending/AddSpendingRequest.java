@@ -6,6 +6,7 @@ import sur.snapps.sentoff.api.store.JsonStoreDetails;
 import sur.snapps.sentoff.api.JsonReference;
 import sur.snapps.sentoff.api.validation.AmountValue;
 import sur.snapps.sentoff.api.validation.DateValue;
+import sur.snapps.sentoff.api.validation.PresentInDB;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -31,6 +32,7 @@ public class AddSpendingRequest {
     private JsonStoreDetails storeDetails;
 
     @Valid
+    @PresentInDB("STORE_LOCATIONS")
     @JsonProperty("storeRef")
     private JsonReference storeReference;
 

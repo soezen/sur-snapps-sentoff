@@ -67,7 +67,6 @@ public class SpendingMapperTest {
         public DataSource dataSource() {
             return new EmbeddedDatabaseBuilder()
                     .setType(EmbeddedDatabaseType.H2)
-//                    .addScript("classpath:schema.sql")
                     .build();
         }
     }

@@ -35,26 +35,6 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void success_withStoreReference() {
-        insertStoreLocationWithId(1);
-
-        AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest()
-                .withStoreReference(1)
-                .build();
-        Number id = postAddSpendingRequest(request)
-                .assertSuccess()
-                .getGeneratedId();
-
-        assertDatabaseTable(Tables.PURCHASES)
-                .hasNumberOfRows(1)
-                .existsRowWithValues(id, "date", "1970-01-01")
-                .existsRowWithValues(id, "amount", "1.00")
-                .existsRowWithValues(id, "store_location_id", request.getStoreReference().getId());
-        assertDatabaseTable(Tables.STORE_LOCATIONS).hasNumberOfRows(1);
-        assertDatabaseTable(Tables.STORES).hasNumberOfRows(1);
-    }
-
-    @Test
     public void success_maximalRequest() {
         AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest()
                 .withStoreName("Colruyt")
@@ -86,6 +66,39 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
                 .hasNumberOfRows(1)
                 .existsRowWithValues(storeId, "name", store.getName())
                 .existsRowWithValues(storeId, "type", store.getType());
+    }
+
+    @Test
+    public void success_withStoreReference() {
+        insertStoreLocationWithId(1);
+
+        AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest()
+            .withStoreReference(1)
+            .build();
+        Number id = postAddSpendingRequest(request)
+            .assertSuccess()
+            .getGeneratedId();
+
+        assertDatabaseTable(Tables.PURCHASES)
+            .hasNumberOfRows(1)
+            .existsRowWithValues(id, "date", "1970-01-01")
+            .existsRowWithValues(id, "amount", "1.00")
+            .existsRowWithValues(id, "store_location_id", request.getStoreReference().getId());
+        assertDatabaseTable(Tables.STORE_LOCATIONS).hasNumberOfRows(1);
+        assertDatabaseTable(Tables.STORES).hasNumberOfRows(1);
+    }
+
+    @Test
+    public void failure_incorrectStoreReference() {
+
+        AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest()
+            .withStoreReference(1)
+            .build();
+        postAddSpendingRequest(request)
+            .assertFailure()
+            .assertErrorOnField("storeReference", "reference_not_found");
+
+        assertDatabaseEmpty();
     }
 
     @Test

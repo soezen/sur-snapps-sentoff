@@ -22,7 +22,7 @@ public class DatabaseConfig {
     private Environment env;
 
     @Bean
-    @Profile("deploy")
+    @Profile({"local", "deploy"})
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getRequiredProperty("spring.datasource.driver-class-name"));
