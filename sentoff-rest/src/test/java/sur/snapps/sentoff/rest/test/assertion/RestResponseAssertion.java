@@ -1,6 +1,7 @@
 package sur.snapps.sentoff.rest.test.assertion;
 
 import sur.snapps.sentoff.api.response.FailureResponse;
+import sur.snapps.sentoff.api.response.MessageType;
 import sur.snapps.sentoff.api.response.RestResponse;
 import sur.snapps.sentoff.api.response.SuccessResponse;
 
@@ -24,6 +25,14 @@ public class RestResponseAssertion {
 
     public RestResponseAssertion assertSuccess() {
         assertTrue("Expected response not to have any errors", response.isSuccessful());
+        return this;
+    }
+
+    public RestResponseAssertion assertMessage(MessageType type, String field) {
+        assertTrue(response instanceof SuccessResponse);
+        SuccessResponse successResponse = (SuccessResponse) response;
+        assertTrue(successResponse.hasMessages());
+        assertNotNull(successResponse.getFieldMessage(field, type));
         return this;
     }
 

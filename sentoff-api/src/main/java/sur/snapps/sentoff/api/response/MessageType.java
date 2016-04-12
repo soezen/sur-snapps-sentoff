@@ -6,6 +6,6 @@ package sur.snapps.sentoff.api.response;
  */
 public enum MessageType {
     GENERATED_ID,
+    DUPLICATE_STORE_LOCATION
     IGNORED_FIELD,
-    DUPLICATE_STORE
 }

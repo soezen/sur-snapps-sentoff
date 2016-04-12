@@ -6,15 +6,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import sur.snapps.sentoff.api.response.JsonMessage;
 import sur.snapps.sentoff.api.response.RestResponse;
 import sur.snapps.sentoff.api.response.SuccessResponse;
 import sur.snapps.sentoff.api.spending.AddSpendingRequest;
 import sur.snapps.sentoff.domain.Spending;
+import sur.snapps.sentoff.domain.check.DataCheckService;
 import sur.snapps.sentoff.domain.mapper.SpendingMapper;
 import sur.snapps.sentoff.domain.repo.SpendingRepository;
 import sur.snapps.sentoff.rest.AbstractRestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author rogge
@@ -30,6 +33,9 @@ public class SpendingController extends AbstractRestController {
     @Autowired
     private SpendingMapper spendingMapper;
 
+    @Autowired
+    private DataCheckService dataCheckService;
+
     @RequestMapping(value = "/add", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse addSpending(
@@ -38,6 +44,8 @@ public class SpendingController extends AbstractRestController {
         Spending spending = spendingMapper.map(request);
         spendingRepository.addSpending(spending);
 
-        return new SuccessResponse(spending.getId());
+        List<JsonMessage> messages = dataCheckService.check(spending);
+
+        return new SuccessResponse(messages);
     }
 }
