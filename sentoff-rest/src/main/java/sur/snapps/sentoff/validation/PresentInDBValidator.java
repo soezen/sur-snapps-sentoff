@@ -2,6 +2,7 @@ package sur.snapps.sentoff.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import sur.snapps.sentoff.api.JsonReference;
 import sur.snapps.sentoff.api.validation.PresentInDB;
 
@@ -12,6 +13,7 @@ import javax.validation.ConstraintValidatorContext;
  * @author sur
  * @since 11/04/2016
  */
+@Component
 public class PresentInDBValidator implements ConstraintValidator<PresentInDB, JsonReference> {
 
     @Autowired

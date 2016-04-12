@@ -2,8 +2,9 @@ package sur.snapps.sentoff.api.spending;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import sur.snapps.sentoff.api.store.JsonStoreDetails;
 import sur.snapps.sentoff.api.JsonReference;
+import sur.snapps.sentoff.api.JsonRequest;
+import sur.snapps.sentoff.api.store.JsonStoreDetails;
 import sur.snapps.sentoff.api.validation.AmountValue;
 import sur.snapps.sentoff.api.validation.DateValue;
 import sur.snapps.sentoff.api.validation.PresentInDB;
@@ -18,7 +19,7 @@ import java.util.List;
  * @since 26/03/2016.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class AddSpendingRequest {
+public class AddSpendingRequest extends JsonRequest {
 
     @NotNull
     @DateValue
