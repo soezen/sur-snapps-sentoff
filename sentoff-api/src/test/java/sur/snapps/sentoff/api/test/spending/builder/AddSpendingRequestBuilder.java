@@ -62,6 +62,13 @@ public class AddSpendingRequestBuilder {
         return this;
     }
 
+    public AddSpendingRequestBuilder withStoreCountry(String country) {
+        storeAddress.setCountry(country);
+        storeDetails.setAddress(storeAddress);
+        request.setStoreDetails(storeDetails);
+        return this;
+    }
+
     public AddSpendingRequestBuilder withStoreReference(int reference) {
         request.setStoreReference(new JsonReference(String.valueOf(reference)));
         return this;

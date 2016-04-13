@@ -3,10 +3,6 @@ package sur.snapps.sentoff.rest.test.spending;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -20,8 +16,8 @@ import sur.snapps.sentoff.domain.repo.StoreLocationRepository;
 import sur.snapps.sentoff.domain.repo.StoreLocationRowMapper;
 import sur.snapps.sentoff.domain.repo.StoreRepository;
 import sur.snapps.sentoff.rest.util.TypeConverter;
+import sur.snapps.sentoff.test.TestDataSourceConfig;
 
-import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -38,7 +34,7 @@ import static org.junit.Assert.assertNull;
     classes = {
         StoreLocationMapper.class, StoreMapper.class, SpendingMapper.class, TypeConverter.class,
         StoreLocationRowMapper.class,
-        StoreLocationRepository.class, StoreRepository.class, SpendingMapperTest.TestDataSourceConfig.class},
+        StoreLocationRepository.class, StoreRepository.class, TestDataSourceConfig.class},
     loader = AnnotationConfigContextLoader.class)
 public class SpendingMapperTest {
 
@@ -58,16 +54,5 @@ public class SpendingMapperTest {
 
         assertEquals(BigDecimal.valueOf(1.0), spending.getAmount());
         assertEquals(new Date(123), spending.getDate());
-    }
-
-    @Configuration
-    static class TestDataSourceConfig {
-
-        @Bean
-        public DataSource dataSource() {
-            return new EmbeddedDatabaseBuilder()
-                    .setType(EmbeddedDatabaseType.H2)
-                    .build();
-        }
     }
 }

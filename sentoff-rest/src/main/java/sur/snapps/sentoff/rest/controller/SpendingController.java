@@ -44,7 +44,7 @@ public class SpendingController extends AbstractRestController {
         Spending spending = spendingMapper.map(request);
         spendingRepository.addSpending(spending);
 
-        List<JsonMessage> messages = dataCheckService.check(spending);
+        List<JsonMessage> messages = dataCheckService.check(request, spending);
 
         return new SuccessResponse(messages);
     }

@@ -15,7 +15,7 @@ import javax.sql.DataSource;
  * @since 26/03/2016.
  */
 @Configuration
-@ComponentScan({"sur.snapps.sentoff.domain.repo", "sur.snapps.sentoff.domain.mapper"})
+@ComponentScan({"sur.snapps.sentoff.domain.repo", "sur.snapps.sentoff.domain.mapper", "sur.snapps.sentoff.rest.util"})
 public class DatabaseConfig {
 
     @Resource
