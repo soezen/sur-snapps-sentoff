@@ -39,6 +39,7 @@ public class StoreLocationRepository extends AbstractRepository {
 
     public Number findMostSimilar(JsonStoreDetails storeDetails) {
         String sql = "SELECT sl.id FROM store_locations sl JOIN stores s ON s.id = sl.store_id WHERE ROWNUM <= 1";
+        // TODO refactor this
         Map<String, Object> args = new HashMap<>();
         if (storeDetails.getName() != null) {
             sql += " AND (s.NAME = :storeName OR s.NAME IS NULL)";

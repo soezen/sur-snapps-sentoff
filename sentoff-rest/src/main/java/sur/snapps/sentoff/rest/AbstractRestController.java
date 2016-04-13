@@ -1,8 +1,9 @@
 package sur.snapps.sentoff.rest;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.google.common.base.CaseFormat;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,6 +13,7 @@ import sur.snapps.sentoff.api.error.FieldError;
 import sur.snapps.sentoff.api.response.ErrorResponse;
 import sur.snapps.sentoff.api.response.FailureResponse;
 import sur.snapps.sentoff.api.response.RestResponse;
+import sur.snapps.sentoff.rest.util.ErrorMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,11 @@ import java.util.stream.Collectors;
  * @since 27/03/2016.
  */
 public abstract class AbstractRestController {
+
+    private Log LOG = LogFactory.getLog(AbstractRestController.class);
+
+    @Autowired
+    private ErrorMessages errorMessages;
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
@@ -52,20 +59,14 @@ public abstract class AbstractRestController {
     }
 
     private Error createError(org.springframework.validation.FieldError fieldError) {
-        String code = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldError.getCode());
-        // TODO refactor this
-        if ("date_value".equals(code)
-            || "amount_value".equals(code)) {
-            code = "invalid_format";
-        } else if ("present_in_d_b".equals(code)) {
-            code = "reference_not_found";
-        }
-        return new FieldError(code, fieldError.getField(), fieldError.getDefaultMessage());
+        LOG.error(fieldError);
+        String errorCode = errorMessages.translate("error.code." + fieldError.getCode());
+        String errorMessage = errorMessages.translate("error.msg." + fieldError.getCode(), fieldError.getDefaultMessage());
+        return new FieldError(errorCode, fieldError.getField(), errorMessage);
     }
 
     private Error createError(Exception ex) {
-        // TODO configure logger
-        System.err.println(ExceptionUtils.getStackTrace(ex));
+        LOG.error("Exception during rest call", ex);
         return new Error(ex.getClass().getSimpleName(), ex.getMessage());
     }
 

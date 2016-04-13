@@ -1,12 +1,10 @@
 package sur.snapps.sentoff.api.validation;
 
 import javax.validation.Constraint;
-import javax.validation.GroupSequence;
 import javax.validation.Payload;
 import javax.validation.ReportAsSingleViolation;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
-import javax.validation.groups.Default;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
