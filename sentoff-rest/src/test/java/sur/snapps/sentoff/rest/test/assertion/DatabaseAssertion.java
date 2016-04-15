@@ -26,7 +26,7 @@ public class DatabaseAssertion<T extends Row> {
     }
 
     public DatabaseAssertion hasNumberOfRows(int count) {
-        assertEquals(count, countRowsInTable(jdbcTemplate, table.getTableName()));
+        assertEquals("expected table " + table.getTableName() + " to have " + count + " row(s)", count, countRowsInTable(jdbcTemplate, table.getTableName()));
         return this;
     }
 

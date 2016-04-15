@@ -21,7 +21,9 @@ import sur.snapps.sentoff.domain.Store;
 import sur.snapps.sentoff.domain.StoreLocation;
 import sur.snapps.sentoff.domain.StoreType;
 import sur.snapps.sentoff.domain.repo.Row;
+import sur.snapps.sentoff.domain.repo.SpendingRepository;
 import sur.snapps.sentoff.domain.repo.StoreLocationRepository;
+import sur.snapps.sentoff.domain.repo.StoreRepository;
 import sur.snapps.sentoff.domain.repo.Table;
 import sur.snapps.sentoff.domain.table.Tables;
 import sur.snapps.sentoff.rest.Application;
@@ -44,10 +46,16 @@ public abstract class AbstractIntegrationTest {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private StoreLocationRepository storeLocationRepository;
+    protected StoreLocationRepository storeLocationRepository;
+
+    @Autowired
+    protected StoreRepository storeRepository;
+
+    @Autowired
+    protected SpendingRepository spendingRepository;
 
     private String getBaseUrl() {
-        return "http://localhost:" + port + "/sentoff";
+        return "http://localhost:" + port;
     }
 
     @Before
@@ -96,6 +104,10 @@ public abstract class AbstractIntegrationTest {
 
     protected void insertStoreLocation(StoreLocation storeLocation) {
         storeLocationRepository.addStoreLocation(storeLocation);
+    }
+
+    protected void insertStore(Store store) {
+        storeRepository.addStore(store);
     }
 
     protected void assertDatabaseEmpty() {

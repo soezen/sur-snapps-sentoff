@@ -29,10 +29,19 @@ public class RestResponseAssertion {
     }
 
     public RestResponseAssertion assertMessage(MessageType type, String field) {
+        assertMessage(type, field, null);
+        return this;
+    }
+
+    public RestResponseAssertion assertMessage(MessageType type, String field, String message) {
         assertTrue(response instanceof SuccessResponse);
         SuccessResponse successResponse = (SuccessResponse) response;
         assertTrue(successResponse.hasMessages());
-        assertNotNull(successResponse.getFieldMessage(field, type));
+        if (message == null) {
+            assertNotNull(successResponse.getFieldMessage(field, type));
+        } else {
+            assertEquals(message, successResponse.getFieldMessage(field, type));
+        }
         return this;
     }
 

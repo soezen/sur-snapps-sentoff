@@ -20,6 +20,7 @@ public class StoresTable implements Table<Store> {
     @Override
     public Map<String, Object> getInsertValues(Store row) {
         Map<String, Object> values = new HashMap<>();
+        values.put("id", row.getId());
         values.put("name", row.getName());
         values.put("type", row.getTypeAsString());
         return values;

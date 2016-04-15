@@ -24,7 +24,7 @@ import java.util.List;
  * @since 26/03/2016.
  */
 @RestController
-@RequestMapping("/spending")
+@RequestMapping("/spendings")
 public class SpendingController extends AbstractRestController {
 
     @Autowired

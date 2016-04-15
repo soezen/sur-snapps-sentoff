@@ -27,6 +27,8 @@ public class DataCheckService {
         for (ICheck check : checks) {
             if (check.appliesTo(request)) {
                 messages.addAll(check.check(request));
+            } else if (check.appliesTo(spending)) {
+                messages.addAll(check.check(spending));
             }
         }
 

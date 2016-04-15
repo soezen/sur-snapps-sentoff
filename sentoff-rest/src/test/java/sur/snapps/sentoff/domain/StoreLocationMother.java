@@ -1,7 +1,4 @@
-package sur.snapps.sentoff.rest.test.mother;
-
-import sur.snapps.sentoff.domain.Store;
-import sur.snapps.sentoff.domain.StoreLocation;
+package sur.snapps.sentoff.domain;
 
 /**
  * @author rogge
@@ -10,25 +7,36 @@ import sur.snapps.sentoff.domain.StoreLocation;
 public class StoreLocationMother {
 
     public static StoreLocation colruytDeerlijk() {
-        return new StoreLocationBuilder()
-                .withName("Colruyt Deerlijk")
-                .withStoreName("Colruyt")
-                .withCity("Deerlijk")
-                .withCountry("BE")
-                .build();
+        StoreLocation storeLocation = new StoreLocationBuilder()
+            .withName("Colruyt Deerlijk")
+            .withStore(StoreMother.colruyt())
+            .withCity("Deerlijk")
+            .withCountry("BE")
+            .build();
+        storeLocation.setId(999);
+        return storeLocation;
+    }
+
+    public static StoreLocation colruytHarelbeke() {
+        StoreLocation storeLocation = new StoreLocationBuilder()
+            .withName("Colruyt Harelbeke")
+            .withStore(StoreMother.colruyt())
+            .withCity("Harelbeke")
+            .withCountry("BE")
+            .build();
+        storeLocation.setId(998);
+        return storeLocation;
     }
 
     private static class StoreLocationBuilder {
         private StoreLocation storeLocation = new StoreLocation();
-        private Store store = new Store();
 
         StoreLocationBuilder withCountry(String country) {
             storeLocation.setCountry(country);
             return this;
         }
 
-        StoreLocationBuilder withStoreName(String name) {
-            store.setName(name);
+        StoreLocationBuilder withStore(Store store) {
             storeLocation.setStore(store);
             return this;
         }

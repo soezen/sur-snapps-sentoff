@@ -1,6 +1,5 @@
 package sur.snapps.sentoff.domain.check;
 
-import sur.snapps.sentoff.api.JsonRequest;
 import sur.snapps.sentoff.api.response.JsonMessage;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
  */
 public interface ICheck {
 
-    boolean appliesTo(JsonRequest subject);
+    boolean appliesTo(Object subject);
 
-    List<JsonMessage> check(JsonRequest object);
+    List<JsonMessage> check(Object object);
 }

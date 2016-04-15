@@ -1,5 +1,7 @@
 package sur.snapps.sentoff.rest.config;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,8 @@ import java.io.IOException;
 @Configuration
 @ComponentScan("sur.snapps.sentoff.domain.check")
 public class RestConfig {
+
+    private static final Log LOG = LogFactory.getLog(RestConfig.class);
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -51,7 +55,7 @@ public class RestConfig {
             protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
                 MyHttpServletResponseWrapper responseWrapper = new MyHttpServletResponseWrapper(response);
                 super.doFilterInternal(request, responseWrapper, filterChain);
-                System.out.println(responseWrapper.getOutputStream().toString());
+                LOG.debug(responseWrapper.getOutputStream().toString());
             }
         };
         f.setIncludePayload(true);

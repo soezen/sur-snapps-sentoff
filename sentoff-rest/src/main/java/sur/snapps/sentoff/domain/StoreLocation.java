@@ -11,6 +11,9 @@ public class StoreLocation implements Row {
     private Number id;
     private String name;
     private Store store;
+    private String street;
+    private String number;
+    private String zipCode;
     private String city;
     private String country;
 
@@ -56,5 +59,29 @@ public class StoreLocation implements Row {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 }

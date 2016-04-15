@@ -12,14 +12,16 @@ import java.util.List;
  * @since 12/04/2016
  */
 public class IgnoredValuesCheck implements ICheck {
+
     @Override
-    public boolean appliesTo(JsonRequest request) {
-        return true;
+    public boolean appliesTo(Object request) {
+        return request instanceof JsonRequest;
     }
 
     @Override
-    public List<JsonMessage> check(JsonRequest request) {
+    public List<JsonMessage> check(Object input) {
         List<JsonMessage> messages = new ArrayList<>();
+        JsonRequest request = (JsonRequest) input;
 
         for (String ignoredField : request.getIgnoredFields()) {
             messages.add(new JsonMessage(MessageType.IGNORED_FIELD, ignoredField, "field ignored"));

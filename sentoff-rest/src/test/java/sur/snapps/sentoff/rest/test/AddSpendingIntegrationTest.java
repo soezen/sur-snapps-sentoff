@@ -11,7 +11,7 @@ import sur.snapps.sentoff.api.store.JsonStoreDetails;
 import sur.snapps.sentoff.api.test.spending.builder.AddSpendingRequestBuilder;
 import sur.snapps.sentoff.domain.table.Tables;
 import sur.snapps.sentoff.rest.test.assertion.RestResponseAssertion;
-import sur.snapps.sentoff.rest.test.mother.StoreLocationMother;
+import sur.snapps.sentoff.domain.StoreLocationMother;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTable;
@@ -123,7 +123,7 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
                 .build();
         postAddSpendingRequest(request)
                 .assertSuccess()
-                .assertMessage(MessageType.DUPLICATE_STORE_LOCATION, "store");
+                .assertMessage(MessageType.DUPLICATE_STORE_LOCATION, "store", "/sentoff/stores/replaceStoreLocation?removeId=2&replaceId=1");
 
         assertDatabaseTable(Tables.PURCHASES).hasNumberOfRows(1);
         assertDatabaseTable(Tables.STORE_LOCATIONS).hasNumberOfRows(2);
@@ -155,7 +155,7 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
     }
 
     private RestResponseAssertion postAddSpendingRequest(AddSpendingRequest request) {
-        RestResponse response = postJson("/spending/add", request);
+        RestResponse response = postJson("/sentoff/spendings/add", request);
         return new RestResponseAssertion(response);
     }
 }

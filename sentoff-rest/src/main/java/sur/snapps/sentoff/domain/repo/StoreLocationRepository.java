@@ -2,7 +2,6 @@ package sur.snapps.sentoff.domain.repo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import sur.snapps.sentoff.api.store.JsonStoreDetails;
 import sur.snapps.sentoff.domain.StoreLocation;
 import sur.snapps.sentoff.domain.table.Tables;
 
@@ -37,37 +36,37 @@ public class StoreLocationRepository extends AbstractRepository {
                 .queryForObject(sql, params, rowMapper);
     }
 
-    public Number findMostSimilar(JsonStoreDetails storeDetails) {
+    public Number findMostSimilar(StoreLocation storeDetails) {
         String sql = "SELECT sl.id FROM store_locations sl JOIN stores s ON s.id = sl.store_id WHERE ROWNUM <= 1";
         // TODO refactor this
         Map<String, Object> args = new HashMap<>();
-        if (storeDetails.getName() != null) {
+        if (storeDetails.getStore().getName() != null) {
             sql += " AND (s.NAME = :storeName OR s.NAME IS NULL)";
-            args.put("storeName", storeDetails.getName());
+            args.put("storeName", storeDetails.getStore().getName());
         }
-        if (storeDetails.getType() != null) {
+        if (storeDetails.getStore().getType() != null) {
             sql += " AND (s.TYPE = :storeType OR s.TYPE IS NULL)";
-            args.put("storeType", storeDetails.getType());
+            args.put("storeType", storeDetails.getStore().getType().name());
         }
-        if (storeDetails.getAddress().getStreet() != null) {
+        if (storeDetails.getStreet() != null) {
             sql += " AND (sl.STREET = :street OR sl.STREET IS NULL)";
-            args.put("street", storeDetails.getAddress().getStreet());
+            args.put("street", storeDetails.getStreet());
         }
-        if (storeDetails.getAddress().getNumber() != null) {
+        if (storeDetails.getNumber() != null) {
             sql += " AND (sl.NUMBER = :number OR sl.NUMBER IS NULL)";
-            args.put("number", storeDetails.getAddress().getNumber());
+            args.put("number", storeDetails.getNumber());
         }
-        if (storeDetails.getAddress().getZipCode() != null) {
+        if (storeDetails.getZipCode() != null) {
             sql += " AND (sl.ZIP_CODE = :zipCode OR sl.ZIP_CODE IS NULL)";
-            args.put("zipCode", storeDetails.getAddress().getZipCode());
+            args.put("zipCode", storeDetails.getZipCode());
         }
-        if (storeDetails.getAddress().getCity() != null) {
+        if (storeDetails.getCity() != null) {
             sql += " AND (sl.CITY = :city OR sl.CITY IS NULL)";
-            args.put("city", storeDetails.getAddress().getCity());
+            args.put("city", storeDetails.getCity());
         }
-        if (storeDetails.getAddress().getCountry() != null) {
+        if (storeDetails.getCountry() != null) {
             sql += " AND (sl.COUNTRY = :country OR sl.COUNTRY IS NULL)";
-            args.put("country", storeDetails.getAddress().getCountry());
+            args.put("country", storeDetails.getCountry());
         }
         List<Integer> results = getNamedParameterJdbcTemplate()
             .queryForList(sql, args, Integer.class);
@@ -80,6 +79,21 @@ public class StoreLocationRepository extends AbstractRepository {
         }
         Number generatedKey = insert(storeLocation).into(Tables.STORE_LOCATIONS);
         storeLocation.setId(generatedKey);
+    }
+
+    public void replaceStoreLocation(Number id, Number replaceId) {
+        Number storeId = findById(id).getStoreId();
+
+        String updateSql = "update purchases set store_location_id = :replaceId where store_location_id = :id";
+        String removeStoreLocationSql = "delete from store_locations where id = :id";
+        String removeStoreSql = "delete from stores where id = :storeId and 0 = (select count(*) from store_locations where store_id = :storeId)";
+        Map<String, Object> args = new HashMap<>();
+        args.put("id", id);
+        args.put("replaceId", replaceId);
+        args.put("storeId", storeId);
+        getNamedParameterJdbcTemplate().update(updateSql, args);
+        getNamedParameterJdbcTemplate().update(removeStoreLocationSql, args);
+        getNamedParameterJdbcTemplate().update(removeStoreSql, args);
     }
 
     private boolean storeIsNew(StoreLocation storeLocation) {
