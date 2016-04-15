@@ -21,8 +21,8 @@ public class ReplaceStoreLocationIntegrationTest extends AbstractIntegrationTest
 
     @Test
     public void success_removeStoreAndStoreLocation() {
-        insertStore(StoreMother.colruyt());
-        insertStoreLocation(StoreLocationMother.colruytDeerlijk());
+        insertStore(StoreMother.colruyt(999));
+        insertStoreLocation(StoreLocationMother.colruytDeerlijk(999));
 
         AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest()
             .withStoreName("Colruyt")
@@ -30,7 +30,6 @@ public class ReplaceStoreLocationIntegrationTest extends AbstractIntegrationTest
             .withStoreCountry("BE")
             .build();
         SuccessResponse response = postAddSpendingRequest(request);
-        Number spendingId = response.getGeneratedId();
 
         assertDatabaseTable(Tables.PURCHASES).hasNumberOfRows(1);
         assertDatabaseTable(Tables.STORE_LOCATIONS).hasNumberOfRows(2);
@@ -47,8 +46,8 @@ public class ReplaceStoreLocationIntegrationTest extends AbstractIntegrationTest
     @Test
     public void success_removeOnlyStoreLocation() {
         // START SITUATION: existing store and store location
-        insertStore(StoreMother.colruyt());
-        insertStoreLocation(StoreLocationMother.colruytDeerlijk());
+        insertStore(StoreMother.colruyt(999));
+        insertStoreLocation(StoreLocationMother.colruytDeerlijk(999));
 
         // adding new store and store location
         AddSpendingRequest request = AddSpendingRequestBuilder.minimalAddSpendingRequest()

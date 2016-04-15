@@ -7,13 +7,17 @@ package sur.snapps.sentoff.domain;
 public class StoreLocationMother {
 
     public static StoreLocation colruytDeerlijk() {
+        return colruytDeerlijk(null);
+    }
+
+    public static StoreLocation colruytDeerlijk(Number id) {
         StoreLocation storeLocation = new StoreLocationBuilder()
             .withName("Colruyt Deerlijk")
-            .withStore(StoreMother.colruyt())
+            .withStore(StoreMother.colruyt(id))
             .withCity("Deerlijk")
             .withCountry("BE")
             .build();
-        storeLocation.setId(999);
+        storeLocation.setId(id);
         return storeLocation;
     }
 
@@ -24,7 +28,6 @@ public class StoreLocationMother {
             .withCity("Harelbeke")
             .withCountry("BE")
             .build();
-        storeLocation.setId(998);
         return storeLocation;
     }
 

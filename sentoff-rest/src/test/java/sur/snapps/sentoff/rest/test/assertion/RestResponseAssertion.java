@@ -19,7 +19,7 @@ public class RestResponseAssertion {
     private RestResponse response;
 
     public RestResponseAssertion(RestResponse response) {
-        assertNotNull(response);
+        assertNotNull("response cannot be null", response);
         this.response = response;
     }
 

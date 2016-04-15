@@ -48,7 +48,7 @@ public class RestConfig {
 
             @Override
             protected void afterRequest(HttpServletRequest request, String message) {
-                System.out.println(message);
+                LOG.debug(message);
             }
 
             @Override

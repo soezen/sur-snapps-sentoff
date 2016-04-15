@@ -155,7 +155,8 @@ public class AddSpendingFileIntegrationTest extends AbstractIntegrationTest {
 
     private RestResponseAssertion postAddSpendingRequest(String fileName) throws IOException {
         String fileContent = Resources.toString(Resources.getResource(JSON_FOLDER + fileName), Charset.defaultCharset());
-        RestResponse response = postJson("/spending/add", fileContent);
+        // TODO create util class with all urls
+        RestResponse response = postJson("/sentoff/spendings/add", fileContent);
         return new RestResponseAssertion(response);
     }
 }

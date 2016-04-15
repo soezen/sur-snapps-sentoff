@@ -15,6 +15,7 @@ import sur.snapps.sentoff.domain.mapper.StoreMapper;
 import sur.snapps.sentoff.domain.repo.StoreLocationRepository;
 import sur.snapps.sentoff.domain.repo.StoreLocationRowMapper;
 import sur.snapps.sentoff.domain.repo.StoreRepository;
+import sur.snapps.sentoff.domain.repo.StoreRowMapper;
 import sur.snapps.sentoff.rest.util.TypeConverter;
 import sur.snapps.sentoff.test.TestDataSourceConfig;
 
@@ -33,7 +34,7 @@ import static org.junit.Assert.assertNull;
 @ContextConfiguration(
     classes = {
         StoreLocationMapper.class, StoreMapper.class, SpendingMapper.class, TypeConverter.class,
-        StoreLocationRowMapper.class,
+        StoreLocationRowMapper.class, StoreRowMapper.class,
         StoreLocationRepository.class, StoreRepository.class, TestDataSourceConfig.class},
     loader = AnnotationConfigContextLoader.class)
 public class SpendingMapperTest {

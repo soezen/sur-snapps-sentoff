@@ -15,6 +15,7 @@ import sur.snapps.sentoff.domain.SpendingMother;
 import sur.snapps.sentoff.domain.repo.StoreLocationRepository;
 import sur.snapps.sentoff.domain.repo.StoreLocationRowMapper;
 import sur.snapps.sentoff.domain.repo.StoreRepository;
+import sur.snapps.sentoff.domain.repo.StoreRowMapper;
 import sur.snapps.sentoff.rest.LinkFactory;
 import sur.snapps.sentoff.domain.StoreLocationMother;
 import sur.snapps.sentoff.test.TestDataSourceConfig;
@@ -30,7 +31,8 @@ import static org.junit.Assert.assertTrue;
     classes = {
         DuplicateStoreCheck.class, LinkFactory.class,
         StoreLocationRepository.class, StoreLocationRowMapper.class,
-        StoreRepository.class, TestDataSourceConfig.class},
+        StoreRepository.class, StoreRowMapper.class,
+        TestDataSourceConfig.class},
     loader = AnnotationConfigContextLoader.class)
 public class DuplicateStoreCheckTest {
 
