@@ -1,11 +1,7 @@
 package sur.snapps.sentoff.rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 import sur.snapps.sentoff.api.response.JsonMessage;
 import sur.snapps.sentoff.api.response.RestResponse;
 import sur.snapps.sentoff.api.response.SuccessResponse;
@@ -17,14 +13,17 @@ import sur.snapps.sentoff.domain.repo.SpendingRepository;
 import sur.snapps.sentoff.rest.AbstractRestController;
 
 import javax.validation.Valid;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import java.util.List;
 
 /**
  * @author rogge
  * @since 26/03/2016.
  */
-@RestController
-@RequestMapping("/spendings")
+@Component
+@Path("/spendings")
 public class SpendingController extends AbstractRestController {
 
     @Autowired
@@ -36,10 +35,10 @@ public class SpendingController extends AbstractRestController {
     @Autowired
     private DataCheckService dataCheckService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestResponse addSpending(
-            @RequestBody @Valid AddSpendingRequest request) {
+    @POST
+    @Path("/add")
+    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+    public RestResponse addSpending(@Valid AddSpendingRequest request) {
 
         Spending spending = spendingMapper.map(request);
         spendingRepository.addSpending(spending);

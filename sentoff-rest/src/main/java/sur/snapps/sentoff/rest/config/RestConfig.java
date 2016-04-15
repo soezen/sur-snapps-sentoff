@@ -2,15 +2,18 @@ package sur.snapps.sentoff.rest.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import sur.snapps.sentoff.rest.controller.SpendingController;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -21,21 +24,27 @@ import java.io.IOException;
  * @since 26/03/2016.
  */
 @Configuration
-@ComponentScan("sur.snapps.sentoff.domain.check")
-public class RestConfig {
+@ComponentScan({"sur.snapps.sentoff.domain.check", "sur.snapps.sentoff.rest.controller"})
+public class RestConfig extends PackagesResourceConfig {
 
     private static final Log LOG = LogFactory.getLog(RestConfig.class);
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/v2/api-docs").allowedOrigins("*");
-                registry.addMapping("/spending/add").allowedOrigins("*");
-            }
-        };
+    public RestConfig() {
+        register(SpendingController.class);
     }
+
+
+
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurerAdapter() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/v2/api-docs").allowedOrigins("*");
+//                registry.addMapping("/spendings/add").allowedOrigins("*");
+//            }
+//        };
+//    }
 
     @Bean
     public Filter requestLogger(){
