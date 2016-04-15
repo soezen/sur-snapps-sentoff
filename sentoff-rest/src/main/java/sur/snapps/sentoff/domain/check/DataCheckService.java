@@ -24,13 +24,12 @@ public class DataCheckService {
         List<JsonMessage> messages = new ArrayList<>();
         messages.add(new JsonMessage(MessageType.GENERATED_ID, "id", String.valueOf(spending.getId())));
 
-        for (ICheck check : checks) {
-            if (check.appliesTo(request)) {
+        checks.stream().filter(check -> check.appliesTo(request)).forEach(check -> {
                 messages.addAll(check.check(request));
-            } else if (check.appliesTo(spending)) {
-                messages.addAll(check.check(spending));
-            }
-        }
+		});
+		checks.stream().filter(check -> check.appliesTo(spending)).forEach(check -> {
+				messages.addAll(check.check(spending));
+		});
 
         return messages;
     }
