@@ -1,12 +1,14 @@
-package sur.snapps.sentoff.rest.controller;
+package sur.snapps.sentoff.rest.config;
 
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
+import io.swagger.jaxrs.listing.SwaggerSerializers;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.internal.scanning.PackageNamesScanner;
+import org.glassfish.jersey.server.model.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
@@ -45,13 +47,14 @@ public class JerseyConfig extends ResourceConfig {
     }
 
     private void configureSwagger() {
-        register(ApiListingResource.class);
+        registerResources(Resource.builder(ApiListingResource.class).path("/api").build());
+        register(SwaggerSerializers.class);
         BeanConfig beanConfig = new BeanConfig();
         // TODO get this from maven or properties file
         beanConfig.setVersion("0.0.1");
         beanConfig.setSchemes(new String[]{"http"});
         beanConfig.setHost("localhost:8080");
-        beanConfig.setBasePath("/sentoff");
+        beanConfig.setBasePath("/sentoff/");
         beanConfig.setResourcePackage("sur.snapps.sentoff.rest.controller");
         beanConfig.setPrettyPrint(true);
         beanConfig.setScan(true);

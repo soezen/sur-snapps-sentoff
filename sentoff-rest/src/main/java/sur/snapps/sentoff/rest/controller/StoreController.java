@@ -1,5 +1,6 @@
 package sur.snapps.sentoff.rest.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sur.snapps.sentoff.api.response.RestResponse;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.MediaType;
  * @since 14/04/2016
  */
 @Component
+@Api
 @Path("/stores")
 public class StoreController {
 

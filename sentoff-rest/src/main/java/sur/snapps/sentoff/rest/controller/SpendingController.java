@@ -1,5 +1,6 @@
 package sur.snapps.sentoff.rest.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sur.snapps.sentoff.api.response.JsonMessage;
@@ -21,6 +22,7 @@ import java.util.List;
  * @author rogge
  * @since 26/03/2016.
  */
+@Api
 @Component
 @Path("/spendings")
 public class SpendingController {

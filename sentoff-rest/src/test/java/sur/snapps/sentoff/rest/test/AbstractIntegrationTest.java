@@ -10,6 +10,7 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,6 +29,8 @@ import sur.snapps.sentoff.domain.repo.Table;
 import sur.snapps.sentoff.domain.table.Tables;
 import sur.snapps.sentoff.rest.Application;
 import sur.snapps.sentoff.rest.test.assertion.DatabaseAssertion;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author rogge
@@ -83,6 +86,13 @@ public abstract class AbstractIntegrationTest {
             e.printStackTrace();
         }
         return null;
+    }
+
+    protected String getString(final String requestUrl) {
+        final TestRestTemplate template = new TestRestTemplate();
+        ResponseEntity<String> responseEntity = template.getForEntity(getBaseUrl() + requestUrl, String.class);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        return responseEntity.getBody();
     }
 
     protected <T extends Row> DatabaseAssertion<T> assertDatabaseTable(Table<T> table) {
