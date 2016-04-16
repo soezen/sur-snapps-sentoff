@@ -10,7 +10,6 @@ import sur.snapps.sentoff.domain.Spending;
 import sur.snapps.sentoff.domain.check.DataCheckService;
 import sur.snapps.sentoff.domain.mapper.SpendingMapper;
 import sur.snapps.sentoff.domain.repo.SpendingRepository;
-import sur.snapps.sentoff.rest.AbstractRestController;
 
 import javax.validation.Valid;
 import javax.ws.rs.POST;
@@ -24,7 +23,7 @@ import java.util.List;
  */
 @Component
 @Path("/spendings")
-public class SpendingController extends AbstractRestController {
+public class SpendingController {
 
     @Autowired
     private SpendingRepository spendingRepository;

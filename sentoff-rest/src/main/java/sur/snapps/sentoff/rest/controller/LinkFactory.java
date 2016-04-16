@@ -1,4 +1,4 @@
-package sur.snapps.sentoff.rest;
+package sur.snapps.sentoff.rest.controller;
 
 import org.springframework.stereotype.Component;
 import sur.snapps.sentoff.domain.StoreLocation;

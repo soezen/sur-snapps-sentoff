@@ -7,7 +7,7 @@ import sur.snapps.sentoff.api.response.MessageType;
 import sur.snapps.sentoff.domain.Spending;
 import sur.snapps.sentoff.domain.StoreLocation;
 import sur.snapps.sentoff.domain.repo.StoreLocationRepository;
-import sur.snapps.sentoff.rest.LinkFactory;
+import sur.snapps.sentoff.rest.controller.LinkFactory;
 
 import java.util.ArrayList;
 import java.util.List;

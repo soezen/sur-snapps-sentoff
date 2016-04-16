@@ -16,7 +16,7 @@ import sur.snapps.sentoff.domain.repo.StoreLocationRepository;
 import sur.snapps.sentoff.domain.repo.StoreLocationRowMapper;
 import sur.snapps.sentoff.domain.repo.StoreRepository;
 import sur.snapps.sentoff.domain.repo.StoreRowMapper;
-import sur.snapps.sentoff.rest.LinkFactory;
+import sur.snapps.sentoff.rest.controller.LinkFactory;
 import sur.snapps.sentoff.domain.StoreLocationMother;
 import sur.snapps.sentoff.test.TestDataSourceConfig;
 

@@ -1,13 +1,15 @@
-package sur.snapps.sentoff.rest.config;
+package sur.snapps.sentoff.rest.controller;
 
+import io.swagger.jaxrs.config.BeanConfig;
+import io.swagger.jaxrs.listing.ApiListingResource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.internal.scanning.PackageNamesScanner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
-import sur.snapps.sentoff.rest.controller.SpendingController;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -23,28 +25,37 @@ import java.io.IOException;
  * @author rogge
  * @since 26/03/2016.
  */
-@Configuration
-@ComponentScan({"sur.snapps.sentoff.domain.check", "sur.snapps.sentoff.rest.controller"})
-public class RestConfig extends PackagesResourceConfig {
+@Component
+public class JerseyConfig extends ResourceConfig {
 
-    private static final Log LOG = LogFactory.getLog(RestConfig.class);
+    private static final Log LOG = LogFactory.getLog(JerseyConfig.class);
 
-    public RestConfig() {
-        register(SpendingController.class);
+    public JerseyConfig() {
+        registerEndpoints();
+        configureSwagger();
+        configureJackson();
     }
 
+    private void registerEndpoints() {
+        registerFinder(new PackageNamesScanner(new String[] {"sur.snapps.sentoff.rest.controller"}, true));
+    }
 
+    private void configureJackson() {
+        register(JacksonFeature.class);
+    }
 
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurerAdapter() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/v2/api-docs").allowedOrigins("*");
-//                registry.addMapping("/spendings/add").allowedOrigins("*");
-//            }
-//        };
-//    }
+    private void configureSwagger() {
+        register(ApiListingResource.class);
+        BeanConfig beanConfig = new BeanConfig();
+        // TODO get this from maven or properties file
+        beanConfig.setVersion("0.0.1");
+        beanConfig.setSchemes(new String[]{"http"});
+        beanConfig.setHost("localhost:8080");
+        beanConfig.setBasePath("/sentoff");
+        beanConfig.setResourcePackage("sur.snapps.sentoff.rest.controller");
+        beanConfig.setPrettyPrint(true);
+        beanConfig.setScan(true);
+    }
 
     @Bean
     public Filter requestLogger(){
