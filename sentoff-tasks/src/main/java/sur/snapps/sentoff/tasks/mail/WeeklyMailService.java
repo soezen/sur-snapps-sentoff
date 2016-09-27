@@ -12,7 +12,7 @@ public class WeeklyMailService {
 	@Autowired
 	private AmountSpentReportService amountSpentReportService;
 	
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(cron = "${cron.reports.amount_spent}")
 	public void mailReport() {
 		System.out.println(amountSpentReportService.generateReport());
 	}

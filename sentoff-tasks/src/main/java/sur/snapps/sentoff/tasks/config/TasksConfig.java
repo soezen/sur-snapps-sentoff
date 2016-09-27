@@ -3,6 +3,7 @@ package sur.snapps.sentoff.tasks.config;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import sur.snapps.sentoff.reports.config.ReportsConfig;
@@ -11,7 +12,7 @@ import sur.snapps.sentoff.reports.config.ReportsConfig;
 @EnableScheduling
 @Configuration
 @ComponentScan("sur.snapps.sentoff.tasks")
+@PropertySource("cron.properties")
 public class TasksConfig {
 
-	
 }
