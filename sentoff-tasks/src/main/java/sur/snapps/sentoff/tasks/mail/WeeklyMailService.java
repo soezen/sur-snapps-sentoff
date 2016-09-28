@@ -1,18 +1,23 @@
 package sur.snapps.sentoff.tasks.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import sur.snapps.sentoff.reports.AmountSpentReportService;
+import sur.snapps.sentoff.tasks.schedule.Task;
 
 @Component
-public class WeeklyMailService {
+public class WeeklyMailService implements Task {
 
 	@Autowired
 	private AmountSpentReportService amountSpentReportService;
 	
-	@Scheduled(cron = "${cron.reports.amount_spent}")
+	
+	@Override
+	public void run() {
+		mailReport();
+	}
+	
 	public void mailReport() {
 		System.out.println(amountSpentReportService.generateReport());
 	}
