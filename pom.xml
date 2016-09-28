@@ -18,6 +18,7 @@
     </parent>
 
     <modules>
+        <module>sentoff-maven-plugin</module>
         <module>sentoff-api</module>
         <module>sentoff-rest</module>
     </modules>
