@@ -1,6 +1,6 @@
 package sur.snapps.sentoff.tasks.schedule;
 
-public interface Task extends Runnable {
+public interface TaskService extends Runnable {
 
     String getName();
 }
