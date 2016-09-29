@@ -1,8 +1,8 @@
 package sur.snapps.sentoff.tasks.api;
 
-import sur.snapps.sentoff.tasks.schedule.TaskStatus;
-
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ScheduledTask {
 
@@ -25,6 +25,15 @@ public class ScheduledTask {
 
 	public Date getNextExecutionTime() {
 		return nextExecutionTime;
+	}
+
+	public Map<String, String> getActions() {
+		Map<String, String> actions = new HashMap<>();
+		// TODO provide absolute url?
+		if (status.equals(TaskStatus.ACTIVE)) {
+			actions.put("CANCEL", "/" + getName() + "/cancel");
+		}
+		return actions;
 	}
 
 	public void setName(String name) {

@@ -1,4 +1,4 @@
-package sur.snapps.sentoff.tasks.schedule;
+package sur.snapps.sentoff.tasks.api;
 
 /**
  * @author sur

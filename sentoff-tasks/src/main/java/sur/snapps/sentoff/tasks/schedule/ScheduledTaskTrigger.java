@@ -7,6 +7,7 @@ import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.support.CronTrigger;
 import sur.snapps.sentoff.tasks.api.ScheduledTask;
+import sur.snapps.sentoff.tasks.api.TaskStatus;
 
 import java.util.Date;
 import java.util.concurrent.ScheduledFuture;
