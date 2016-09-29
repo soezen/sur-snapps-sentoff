@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import sur.snapps.sentoff.tasks.api.ScheduleResponse;
+import sur.snapps.sentoff.tasks.api.ScheduledTask;
 import sur.snapps.sentoff.tasks.schedule.ScheduleTrigger;
 
 @Component

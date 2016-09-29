@@ -1,16 +1,19 @@
 package sur.snapps.sentoff.tasks.schedule;
 
-import java.util.concurrent.ScheduledFuture;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.Trigger;
+import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.support.CronTrigger;
 
-public class ScheduleTrigger {
+import java.util.Date;
+import java.util.concurrent.ScheduledFuture;
+
+public class ScheduleTrigger implements Trigger {
 	private static final Log LOG = LogFactory.getLog(ScheduleTrigger.class);
 	
-	private CronTrigger cronTrigger;
+	private Trigger delegate;
 	private TaskScheduler scheduler;
 	private Task task;
 	private ScheduledFuture<?> future;
@@ -26,12 +29,32 @@ public class ScheduleTrigger {
 			future.cancel(true);
 		}
 		// TODO are you certain that the overwritten cronTrigger does not keep going?
-		cronTrigger = new CronTrigger(cronExpression);
-		future = scheduler.schedule(task, cronTrigger);
+		delegate = new CronTrigger(cronExpression);
+		future = scheduler.schedule(new Runnable() {
+			@Override
+			public void run() {
+				LOG.debug("Starting sentoff task " + task.getName());
+				try {
+					task.run();
+					LOG.debug("Finished sentoff task " + task.getName() + " successfully");
+				} catch (Throwable t) {
+					throw new ScheduledTaskError(t, task);
+				}
+			}
+		}, this);
 	}
 	
 	public String getCronExpression() {
-		return cronTrigger == null ? null : cronTrigger.getExpression();
+		if (delegate instanceof CronTrigger) {
+			return ((CronTrigger) delegate).getExpression();
+		}
+		return null;
 	}
-	
+
+	@Override
+	public Date nextExecutionTime(TriggerContext triggerContext) {
+		Date nextExecutionTime = delegate.nextExecutionTime(triggerContext);
+		LOG.debug("Scheduling next execution of sentoff task " + task.getName() + " at " + nextExecutionTime);
+		return nextExecutionTime;
+	}
 }

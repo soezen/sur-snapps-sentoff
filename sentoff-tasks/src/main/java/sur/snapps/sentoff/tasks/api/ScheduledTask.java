@@ -1,4 +1,4 @@
-package sur.snapps.sentoff.tasks.controller;
+package sur.snapps.sentoff.tasks.api;
 
 public class ScheduledTask {
 
