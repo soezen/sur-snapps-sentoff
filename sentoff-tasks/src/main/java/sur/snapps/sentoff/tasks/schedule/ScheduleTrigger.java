@@ -22,26 +22,38 @@ public class ScheduleTrigger implements Trigger {
 		this.scheduler = scheduler;
 		this.task = task;
 	}
+
+	public void cancel() {
+		boolean cancelled = false;
+		if (future != null) {
+			cancelled = future.cancel(true);
+		}
+
+		if (cancelled) {
+			LOG.debug("Cancelled sentoff task " + task.getName());
+		} else {
+			LOG.debug("Unable to cancel sentoff task " + task.getName());
+		}
+	}
 	
 	public void schedule(String cronExpression) {
-		if (future != null) {
-			LOG.debug("Cancelling task : " + task);
-			future.cancel(true);
+		cancel();
+
+		if (cronExpression == null) {
+			return;
 		}
+
 		// TODO are you certain that the overwritten cronTrigger does not keep going?
 		delegate = new CronTrigger(cronExpression);
-		future = scheduler.schedule(new Runnable() {
-			@Override
-			public void run() {
-				LOG.debug("Starting sentoff task " + task.getName());
-				try {
-					task.run();
-					LOG.debug("Finished sentoff task " + task.getName() + " successfully");
-				} catch (Throwable t) {
-					throw new ScheduledTaskError(t, task);
-				}
-			}
-		}, this);
+		future = scheduler.schedule((Runnable) () -> {
+            LOG.debug("Starting sentoff task " + task.getName());
+            try {
+                task.run();
+                LOG.debug("Finished sentoff task " + task.getName() + " successfully");
+            } catch (Throwable t) {
+                throw new ScheduledTaskError(t, task);
+            }
+        }, this);
 	}
 	
 	public String getCronExpression() {
@@ -49,6 +61,10 @@ public class ScheduleTrigger implements Trigger {
 			return ((CronTrigger) delegate).getExpression();
 		}
 		return null;
+	}
+
+	public String getTaskName() {
+		return task.getName();
 	}
 
 	@Override
