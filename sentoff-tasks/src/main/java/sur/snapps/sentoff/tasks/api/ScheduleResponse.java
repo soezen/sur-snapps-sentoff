@@ -1,4 +1,4 @@
-package sur.snapps.sentoff.tasks.controller;
+package sur.snapps.sentoff.tasks.api;
 
 import java.util.ArrayList;
 import java.util.List;
