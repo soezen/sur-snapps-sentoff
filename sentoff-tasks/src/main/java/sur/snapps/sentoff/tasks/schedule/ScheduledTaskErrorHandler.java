@@ -15,8 +15,8 @@ public class ScheduledTaskErrorHandler implements ErrorHandler {
     @Override
     public void handleError(Throwable throwable) {
         if (throwable instanceof ScheduledTaskError) {
-            Task task = ((ScheduledTaskError) throwable).getTask();
-            LOG.error("Unexpected error occurred in sentoff task " + task.getName());
+            TaskService taskService = ((ScheduledTaskError) throwable).getTaskService();
+            LOG.error("Unexpected error occurred in sentoff task " + taskService.getName());
             LOG.debug("Unexpected error stacktrace", throwable);
         } else  {
             LOG.error("Unexpected error occurred in scheduled task", throwable);

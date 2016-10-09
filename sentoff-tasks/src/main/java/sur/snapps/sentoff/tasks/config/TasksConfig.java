@@ -11,8 +11,8 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import sur.snapps.sentoff.reports.config.ReportsConfig;
-import sur.snapps.sentoff.tasks.mail.WeeklyMailService;
-import sur.snapps.sentoff.tasks.schedule.ScheduleTrigger;
+import sur.snapps.sentoff.tasks.mail.WeeklyMailTaskService;
+import sur.snapps.sentoff.tasks.schedule.ScheduledTaskTrigger;
 import sur.snapps.sentoff.tasks.schedule.ScheduledTaskErrorHandler;
 
 @Import({ ReportsConfig.class })
@@ -23,7 +23,7 @@ import sur.snapps.sentoff.tasks.schedule.ScheduledTaskErrorHandler;
 public class TasksConfig {
 
 	@Autowired
-	private WeeklyMailService weeklyMailService;
+	private WeeklyMailTaskService weeklyMailService;
 	
 	@Value("${cron.reports.amount_spent}")
 	private String cronReportSpentAmount;
@@ -36,9 +36,9 @@ public class TasksConfig {
 	}
 	
 	
-	@Bean(name = WeeklyMailService.TASK_NAME)
-	public ScheduleTrigger scheduleWeeklyMailService() {
-		ScheduleTrigger trigger = new ScheduleTrigger(taskScheduler(), weeklyMailService);
+	@Bean(name = WeeklyMailTaskService.TASK_NAME)
+	public ScheduledTaskTrigger scheduleWeeklyMailService() {
+		ScheduledTaskTrigger trigger = new ScheduledTaskTrigger(taskScheduler(), weeklyMailService);
 		trigger.schedule(cronReportSpentAmount);
 		return trigger;
 	}

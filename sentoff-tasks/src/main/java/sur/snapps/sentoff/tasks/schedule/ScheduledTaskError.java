@@ -6,15 +6,15 @@ package sur.snapps.sentoff.tasks.schedule;
  */
 public class ScheduledTaskError extends RuntimeException {
 
-    private Task task;
+    private TaskService taskService;
 
-    public ScheduledTaskError(Throwable cause, Task task) {
+    public ScheduledTaskError(Throwable cause, TaskService taskService) {
         super(cause);
-        this.task = task;
+        this.taskService = taskService;
     }
 
-    public Task getTask() {
-        return task;
+    public TaskService getTaskService() {
+        return taskService;
     }
 
 

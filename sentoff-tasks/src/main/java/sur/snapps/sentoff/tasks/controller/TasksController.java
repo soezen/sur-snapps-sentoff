@@ -1,44 +1,55 @@
 package sur.snapps.sentoff.tasks.controller;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import sur.snapps.sentoff.tasks.api.ScheduleResponse;
-import sur.snapps.sentoff.tasks.api.ScheduledTask;
-import sur.snapps.sentoff.tasks.schedule.ScheduleTrigger;
+import sur.snapps.sentoff.tasks.schedule.ScheduledTaskTrigger;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.Map;
 
 @Component
 @Path("/tasks")
 public class TasksController {
 
 	@Autowired
-	private Map<String, ScheduleTrigger> scheduledTasks;
+	private Map<String, ScheduledTaskTrigger> scheduledTasks;
 	
 	@GET
 	@Path("/schedule")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ScheduleResponse schedule() {
 		ScheduleResponse response = new ScheduleResponse();
-		for (Entry<String, ScheduleTrigger> entry : scheduledTasks.entrySet()) {
-			ScheduleTrigger trigger = entry.getValue();
-			ScheduledTask scheduledTask = new ScheduledTask();
-			// TODO add links to possible actions on a task
-			scheduledTask.setName(entry.getKey());
-			scheduledTask.setSchedule(trigger.getCronExpression());
-			response.addScheduledTask(scheduledTask);
+		for (ScheduledTaskTrigger trigger : scheduledTasks.values()) {
+			response.addScheduledTask(trigger.getScheduledTask());
 		}
 		return response;
 	}
-	
-	// TODO logging with aop on ReschedulingRunnable
+
+
+	// TODO add task name in path
+	@POST
+	@Path("/{taskName}/cancel")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ScheduleResponse cancel(@PathParam("taskName") String taskName) {
+		if (!scheduledTasks.containsKey(taskName)) {
+			return new ScheduleResponse();
+		}
+		ScheduledTaskTrigger trigger = scheduledTasks.get(taskName);
+		trigger.cancel();
+
+		ScheduleResponse response = new ScheduleResponse();
+		response.addScheduledTask(trigger.getScheduledTask());
+		return response;
+	}
+
+		// TODO add links to possible actions on a task
+
 	// TODO cancel scheduled tasks
 	// TODO security on certain operations
 }
