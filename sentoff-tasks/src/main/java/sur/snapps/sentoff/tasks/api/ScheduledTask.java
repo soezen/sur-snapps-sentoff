@@ -27,13 +27,32 @@ public class ScheduledTask {
 		return nextExecutionTime;
 	}
 
-	public Map<String, String> getActions() {
-		Map<String, String> actions = new HashMap<>();
+	public Map<String, Object> getActions() {
+		Map<String, Object> actions = new HashMap<>();
 		// TODO provide absolute url?
+		actions.put("EXECUTE", new Action("/" + getName() + "/execute", "POST"));
 		if (status.equals(TaskStatus.ACTIVE)) {
-			actions.put("CANCEL", "/" + getName() + "/cancel");
+			actions.put("CANCEL", new Action("/" + getName() + "/cancel", "POST"));
 		}
 		return actions;
+	}
+	
+	class Action {
+		String url;
+		String method;
+		
+		public Action(String url, String method) {
+			this.url = url;
+			this.method = method;
+		}
+		
+		public String getMethod() {
+			return method;
+		}
+		
+		public String getUrl() {
+			return url;
+		}
 	}
 
 	public void setName(String name) {

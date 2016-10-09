@@ -66,6 +66,10 @@ public class ScheduledTaskTrigger implements Trigger {
         }, this);
 		scheduledTask.setStatus(TaskStatus.ACTIVE);
 	}
+	
+	public void execute() {
+		taskService.run();
+	}
 
 	public ScheduledTask getScheduledTask() {
 		return scheduledTask;

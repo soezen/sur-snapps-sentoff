@@ -19,7 +19,7 @@ import sur.snapps.sentoff.tasks.schedule.ScheduledTaskErrorHandler;
 @EnableScheduling
 @Configuration
 @ComponentScan("sur.snapps.sentoff.tasks")
-@PropertySource("cron.properties")
+@PropertySource("classpath:cron.properties")
 public class TasksConfig {
 
 	@Autowired

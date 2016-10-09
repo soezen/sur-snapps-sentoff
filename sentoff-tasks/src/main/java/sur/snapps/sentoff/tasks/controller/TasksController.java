@@ -32,7 +32,6 @@ public class TasksController {
 	}
 
 
-	// TODO add task name in path
 	@POST
 	@Path("/{taskName}/cancel")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -47,6 +46,23 @@ public class TasksController {
 		response.addScheduledTask(trigger.getScheduledTask());
 		return response;
 	}
+	
+	@POST
+	@Path("/{taskName}/execute")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ScheduleResponse execute(@PathParam("taskName") String taskName) {
+		if (!scheduledTasks.containsKey(taskName)) {
+			return new ScheduleResponse();
+		}
+		ScheduledTaskTrigger trigger = scheduledTasks.get(taskName);
+		trigger.execute();
+		
+
+		ScheduleResponse response = new ScheduleResponse();
+		response.addScheduledTask(trigger.getScheduledTask());
+		return response;
+	}
+
 
 		// TODO add links to possible actions on a task
 
