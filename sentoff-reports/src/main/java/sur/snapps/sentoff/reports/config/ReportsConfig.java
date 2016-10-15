@@ -15,7 +15,7 @@ public class ReportsConfig {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost("smtp.sendgrid.net");
 		mailSender.setPort(587);
-		mailSender.setPassword("2pimkies");
+		mailSender.setPassword("****");
 		mailSender.setUsername("soezen");
 		mailSender.getJavaMailProperties().put("mail.smtp.auth", "true");
 		mailSender.getJavaMailProperties().put("mail.smtp.starttls.enable", "true");
