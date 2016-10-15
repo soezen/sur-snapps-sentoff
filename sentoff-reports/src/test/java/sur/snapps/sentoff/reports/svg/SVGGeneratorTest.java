@@ -7,7 +7,7 @@ public class SVGGeneratorTest {
 	private SVGGenerator generator = new SVGGenerator();
 	
 	@Test
-	public void testGenerateSVG() {
+	public void testGenerateSVG() throws Exception {
 		generator.generateSVG();
 	}
 }
