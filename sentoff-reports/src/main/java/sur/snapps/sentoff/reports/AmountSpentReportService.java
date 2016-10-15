@@ -1,9 +1,13 @@
 package sur.snapps.sentoff.reports;
 
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
+import org.springframework.util.FileSystemUtils;
+import org.springframework.util.ResourceUtils;
 
 @Component
 public class AmountSpentReportService {
@@ -12,18 +16,21 @@ public class AmountSpentReportService {
 	private JavaMailSender mailSender;
 	
 	public String generateReport() {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo("rogge.suzan@gmail.com");
-		message.setFrom("noreply@sentoff.snapps.sur");
-		message.setText("<html><svg class=\"chart\" width=\"420\" height=\"120\"><g transform=\"translate(0,0)\"><rect width=\"40\" height=\"19\"></rect>"
-				+ "<text x=\"37\" y=\"9.5\" dy=\".35em\">4</text></g><g transform=\"translate(0,20)\"><rect width=\"80\" height=\"19\"></rect>"
-				+ "<text x=\"77\" y=\"9.5\" dy=\".35em\">8</text></g><g transform=\"translate(0,40)\"><rect width=\"150\" height=\"19\"></rect>"
-				+ "<text x=\"147\" y=\"9.5\" dy=\".35em\">15</text></g><g transform=\"translate(0,60)\"><rect width=\"160\" height=\"19\"></rect>"
-				+ "<text x=\"157\" y=\"9.5\" dy=\".35em\">16</text></g><g transform=\"translate(0,80)\"><rect width=\"230\" height=\"19\"></rect>"
-				+ "<text x=\"227\" y=\"9.5\" dy=\".35em\">23</text></g><g transform=\"translate(0,100)\"><rect width=\"420\" height=\"19\"></rect>"
-				+ "<text x=\"417\" y=\"9.5\" dy=\".35em\">42</text></g></svg></html>");
-		mailSender.send(message);
+		try {
+			// TODO make mail service
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message, true);
+			helper.addTo("rogge.suzan@gmail.com");
+			helper.setFrom("noreply@sentoff.snapps.sur");
+			helper.setText("<html><body><img src='cid:test'></img></body></html>", true);
+			helper.addInline("test", ResourceUtils.getFile("classpath:soezen.jpg"));
+			mailSender.send(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "ERROR sending mail";
+		}
 		return "REPORT";
+		
 
 		// TODO log failures (in db or file, or both?)
 	}

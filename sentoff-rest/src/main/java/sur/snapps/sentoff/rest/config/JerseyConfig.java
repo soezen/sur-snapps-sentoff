@@ -45,7 +45,7 @@ public class JerseyConfig extends ResourceConfig {
     private void configureJackson() {
         register(JacksonFeature.class);
     }
-
+    
     private void configureSwagger() {
         registerResources(Resource.builder(ApiListingResource.class).path("/api").build());
         register(SwaggerSerializers.class);

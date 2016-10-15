@@ -1,19 +1,14 @@
-package sur.snapps.sentoff.rest;
+package sur.snapps.sentoff.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
-import org.springframework.context.annotation.Import;
-import sur.snapps.sentoff.rest.config.CheckConfig;
-import sur.snapps.sentoff.rest.config.DatabaseConfig;
-import sur.snapps.sentoff.rest.config.RestConfig;
 
 /**
  * @author rogge
  * @since 26/03/2016.
  */
-@Import({DatabaseConfig.class, CheckConfig.class, RestConfig.class})
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
@@ -24,6 +19,6 @@ public class Application extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(Application.class).profiles("deploy");
+        return builder.sources(Application.class);
     }
 }

@@ -22,6 +22,7 @@
         <module>sentoff-rest</module>
         <module>sentoff-reports</module>
         <module>sentoff-tasks</module>
+	<module>sentoff-web</module>
     </modules>
 
     <properties>
