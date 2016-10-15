@@ -43,4 +43,5 @@ public class TasksConfig {
 		return trigger;
 	}
 	
+	// TODO logging of task executions
 }

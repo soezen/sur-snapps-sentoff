@@ -24,6 +24,8 @@ public class AmountSpentReportService {
 				+ "<text x=\"417\" y=\"9.5\" dy=\".35em\">42</text></g></svg></html>");
 		mailSender.send(message);
 		return "REPORT";
+
+		// TODO log failures (in db or file, or both?)
 	}
 }
 
