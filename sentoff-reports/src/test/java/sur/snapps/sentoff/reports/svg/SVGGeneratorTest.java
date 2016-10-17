@@ -8,6 +8,6 @@ public class SVGGeneratorTest {
 	
 	@Test
 	public void testGenerateSVG() throws Exception {
-		generator.generateSVG();
+		 generator.generateSVG();
 	}
 }

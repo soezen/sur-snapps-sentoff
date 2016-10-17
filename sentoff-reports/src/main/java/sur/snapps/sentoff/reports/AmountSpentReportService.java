@@ -9,11 +9,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.ResourceUtils;
 
+import sur.snapps.sentoff.reports.svg.SVGGenerator;
+
 @Component
 public class AmountSpentReportService {
 
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	@Autowired
+	private SVGGenerator svgGenerator;
 	
 	public String generateReport() {
 		try {
@@ -22,7 +27,8 @@ public class AmountSpentReportService {
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
 			helper.addTo("rogge.suzan@gmail.com");
 			helper.setFrom("noreply@sentoff.snapps.sur");
-			helper.setText("<html><body><img src='cid:test'></img></body></html>", true);
+			String svg = svgGenerator.generateSVG();
+			helper.setText("<html><body>" + svg + "</body></html>", true);
 			helper.addInline("test", ResourceUtils.getFile("classpath:soezen.jpg"));
 			mailSender.send(message);
 		} catch (Exception e) {
