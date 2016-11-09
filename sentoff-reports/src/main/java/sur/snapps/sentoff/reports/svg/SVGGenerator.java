@@ -5,11 +5,9 @@ import static org.springframework.util.ResourceUtils.getFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.Writer;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
@@ -19,13 +17,11 @@ import javax.script.ScriptEngineManager;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
-import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.batik.util.XMLResourceDescriptor;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -64,8 +60,8 @@ public class SVGGenerator {
         JPEGTranscoder t = new JPEGTranscoder();
         t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
         
-        TranscoderInput input = new TranscoderInput(createDocument());
-        OutputStream outStream = new FileOutputStream("out.jpg");
+        TranscoderInput input = new TranscoderInput(document);
+        OutputStream outStream = new FileOutputStream("src/main/resources/out.jpg");
         TranscoderOutput output = new TranscoderOutput(outStream);
         
         t.transcode(input, output);

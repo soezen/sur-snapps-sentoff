@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.util.ResourceUtils;
 
 import sur.snapps.sentoff.reports.svg.SVGGenerator;
@@ -22,14 +21,14 @@ public class AmountSpentReportService {
 	
 	public String generateReport() {
 		try {
-			// TODO make mail service
+		    // TODO make mail service
 			MimeMessage message = mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
 			helper.addTo("rogge.suzan@gmail.com");
 			helper.setFrom("noreply@sentoff.snapps.sur");
-			String svg = svgGenerator.generateSVG();
-			helper.setText("<html><body>" + svg + "</body></html>", true);
-			helper.addInline("test", ResourceUtils.getFile("classpath:soezen.jpg"));
+			svgGenerator.generateSVG();
+			helper.setText("<html><body><img src='cid:test'></img></body></html>", true);
+			helper.addInline("test", ResourceUtils.getFile("classpath:out.jpg"));
 			mailSender.send(message);
 		} catch (Exception e) {
 			e.printStackTrace();
