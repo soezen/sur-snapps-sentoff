@@ -22,13 +22,4 @@ public class Application {
     	new SpringApplicationBuilder(Application.class)
     		.web(true).profiles("deploy").run();
     }
-<<<<<<< Updated upstream
-
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(Application.class).profiles("deploy");
-    }
-=======
-    
->>>>>>> Stashed changes
 }

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sentoff-rest</artifactId>
-<!--     <packaging>war</packaging> -->
+    <packaging>war</packaging>
 
     <parent>
         <groupId>sur.snapps.sentoff</groupId>
