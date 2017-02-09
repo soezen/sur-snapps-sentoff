@@ -35,4 +35,15 @@ CREATE TABLE purchases (
 ALTER TABLE purchases
     ADD CONSTRAINT purchases_fk_store_location
     FOREIGN KEY (store_location_id) REFERENCES store_locations (id);
-
+    
+drop table messages;    
+    
+-- MESSAGE_LOGS
+CREATE TABLE messages (
+	id INTEGER NOT NULL AUTO_INCREMENT,
+	date timestamp NOT NULL,
+	method VARCHAR(15) not null,
+	uri varchar(100) not null,
+	payload text not null,
+	primary key (id)
+);

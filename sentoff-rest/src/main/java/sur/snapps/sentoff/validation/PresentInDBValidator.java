@@ -31,6 +31,7 @@ public class PresentInDBValidator implements ConstraintValidator<PresentInDB, Js
         if (value == null) {
             return true;
         }
+        
         Integer count = jdbcTemplate.queryForObject("select count(*) from " + tableName + " where id = ?", Integer.class, value.getId());
         return count > 0;
     }

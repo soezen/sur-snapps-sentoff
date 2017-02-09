@@ -1,17 +1,8 @@
 package sur.snapps.sentoff.rest.config;
 
-import io.swagger.jaxrs.config.BeanConfig;
-import io.swagger.jaxrs.listing.ApiListingResource;
-import io.swagger.jaxrs.listing.SwaggerSerializers;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.internal.scanning.PackageNamesScanner;
-import org.glassfish.jersey.server.model.Resource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.AbstractRequestLoggingFilter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -21,7 +12,25 @@ import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.IOException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.internal.scanning.PackageNamesScanner;
+import org.glassfish.jersey.server.model.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.AbstractRequestLoggingFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.WebUtils;
+
+import io.swagger.jaxrs.config.BeanConfig;
+import io.swagger.jaxrs.listing.ApiListingResource;
+import io.swagger.jaxrs.listing.SwaggerSerializers;
+import sur.snapps.sentoff.domain.Message;
+import sur.snapps.sentoff.domain.repo.MessageRepository;
 
 /**
  * @author rogge
@@ -31,6 +40,9 @@ import java.io.IOException;
 public class JerseyConfig extends ResourceConfig {
 
     private static final Log LOG = LogFactory.getLog(JerseyConfig.class);
+    
+    @Autowired
+    private MessageRepository messageRepository;
 
     public JerseyConfig() {
         registerEndpoints();
@@ -66,12 +78,32 @@ public class JerseyConfig extends ResourceConfig {
 
             @Override
             protected void beforeRequest(HttpServletRequest request, String message) {
-                // do nothing
             }
 
             @Override
             protected void afterRequest(HttpServletRequest request, String message) {
                 LOG.debug(message);
+            	Message msg = new Message();
+            	msg.setDate(new Date());
+            	msg.setMethod(request.getMethod());
+            	msg.setUri(request.getRequestURI());
+            	ContentCachingRequestWrapper wrapper =
+    					WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
+            	String payload = null;
+				if (wrapper != null) {
+    				byte[] buf = wrapper.getContentAsByteArray();
+    				if (buf.length > 0) {
+    					int length = Math.min(buf.length, getMaxPayloadLength());
+    					try {
+    						payload = new String(buf, 0, length, wrapper.getCharacterEncoding());
+    					}
+    					catch (UnsupportedEncodingException ex) {
+    						payload = "[unknown]";
+    					}
+    				}
+    			}
+            	msg.setPayload(payload);
+            	messageRepository.addMessage(msg);
             }
 
             @Override

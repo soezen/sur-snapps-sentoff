@@ -39,7 +39,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @WebIntegrationTest(randomPort = true)
-@ActiveProfiles("test")
+@ActiveProfiles({"test","local"})
 public abstract class AbstractIntegrationTest {
 
     @Value("${local.server.port}")

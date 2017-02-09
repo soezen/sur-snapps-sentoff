@@ -1,10 +1,10 @@
 package sur.snapps.sentoff.rest;
 
-import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
+
 import sur.snapps.sentoff.rest.config.CheckConfig;
 import sur.snapps.sentoff.rest.config.DatabaseConfig;
 import sur.snapps.sentoff.rest.config.RestConfig;
@@ -15,14 +15,20 @@ import sur.snapps.sentoff.rest.config.RestConfig;
  */
 @Import({DatabaseConfig.class, CheckConfig.class, RestConfig.class})
 @SpringBootApplication
-public class Application extends SpringBootServletInitializer {
+@EnableAutoConfiguration
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    	new SpringApplicationBuilder(Application.class)
+    		.web(true).profiles("deploy").run();
     }
+<<<<<<< Updated upstream
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(Application.class).profiles("deploy");
     }
+=======
+    
+>>>>>>> Stashed changes
 }

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sentoff-rest</artifactId>
-    <packaging>war</packaging>
+<!--     <packaging>war</packaging> -->
 
     <parent>
         <groupId>sur.snapps.sentoff</groupId>
@@ -32,11 +32,6 @@
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -89,6 +84,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+			        <executable>true</executable>
+			    </configuration>
             </plugin>
         </plugins>
     </build>
