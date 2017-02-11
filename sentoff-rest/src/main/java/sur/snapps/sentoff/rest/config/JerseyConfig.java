@@ -83,6 +83,9 @@ public class JerseyConfig extends ResourceConfig {
             @Override
             protected void afterRequest(HttpServletRequest request, String message) {
                 LOG.debug(message);
+                if ("GET".equals(request.getMethod())) {
+                	return;
+                }
             	Message msg = new Message();
             	msg.setDate(new Date());
             	msg.setMethod(request.getMethod());
@@ -102,6 +105,10 @@ public class JerseyConfig extends ResourceConfig {
     					}
     				}
     			}
+				// TODO cleanup method
+				if (payload == null) {
+					return;
+				}
             	msg.setPayload(payload);
             	messageRepository.addMessage(msg);
             }

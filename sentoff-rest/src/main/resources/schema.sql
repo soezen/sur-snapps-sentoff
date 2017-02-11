@@ -1,3 +1,13 @@
+drop table if exists accounts;
+
+create table accounts (
+	id integer not null auto_increment,
+	name varchar(100) not null,
+	owner_id integer not null,
+	balance numeric(12,2) not null default 0,
+	primary key (id)
+);
+
 -- STORES
 CREATE TABLE stores (
   id INTEGER NOT NULL AUTO_INCREMENT,
@@ -36,7 +46,7 @@ ALTER TABLE purchases
     ADD CONSTRAINT purchases_fk_store_location
     FOREIGN KEY (store_location_id) REFERENCES store_locations (id);
     
-drop table messages;    
+drop table if exists messages;
     
 -- MESSAGE_LOGS
 CREATE TABLE messages (

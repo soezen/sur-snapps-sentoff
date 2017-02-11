@@ -26,7 +26,7 @@ public abstract class AbstractRowMapper<T> implements RowMapper<T> {
         Map<String, Integer> columnIndices = new HashMap<>();
         int count = metaData.getColumnCount();
         for (int i = 1; i <= count; i++) {
-            columnIndices.put(metaData.getTableName(i) + "." + metaData.getColumnName(i), i);
+            columnIndices.put(metaData.getTableName(i).toUpperCase() + "." + metaData.getColumnName(i).toUpperCase(), i);
         }
         return columnIndices;
     }

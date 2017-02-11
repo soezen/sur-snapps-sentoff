@@ -155,7 +155,7 @@ public class AddSpendingIntegrationTest extends AbstractIntegrationTest {
     }
 
     private RestResponseAssertion postAddSpendingRequest(AddSpendingRequest request) {
-        RestResponse response = postJson("/sentoff/spendings/add", request);
+        RestResponse response = postJson("/sentoff/spendings", request);
         return new RestResponseAssertion(response);
     }
 }

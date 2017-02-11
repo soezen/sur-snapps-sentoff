@@ -20,6 +20,9 @@ public class Application {
 
     public static void main(String[] args) {
     	new SpringApplicationBuilder(Application.class)
-    		.web(true).profiles("deploy").run();
+    		.web(true)
+    		.profiles("deploy")
+//    		.profiles("local")
+    		.run();
     }
 }

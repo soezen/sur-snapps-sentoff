@@ -82,7 +82,7 @@ public class ReplaceStoreLocationIntegrationTest extends AbstractIntegrationTest
     }
 
     private SuccessResponse postAddSpendingRequest(AddSpendingRequest request) {
-        RestResponse response = postJson("/sentoff/spendings/add", request);
+        RestResponse response = postJson("/sentoff/spendings", request);
         new RestResponseAssertion(response).assertSuccess();
         return (SuccessResponse) response;
     }

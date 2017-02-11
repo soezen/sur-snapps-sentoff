@@ -19,6 +19,7 @@ public class ExceptionHandler implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(Throwable e) {
+    	e.printStackTrace();
         return Response.serverError()
             .entity(e.getMessage())
             .build();
