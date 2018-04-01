@@ -1,5 +1,6 @@
 package sur.snapps.sentoff.domain.table;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class MessagesTable implements Table<Message> {
 	
     public Map<String, Object> getInsertValues(Message message) {
         Map<String, Object> values = new HashMap<>();
-        values.put("request_timestamp", message.getRequestTimestamp());
+        values.put("request_timestamp", Timestamp.valueOf(message.getRequestTimestamp()));
         values.put("request_uri", message.getRequestUri());
         values.put("request_method", message.getRequestMethod());
         values.put("request_payload", message.getRequestPayload());
@@ -32,7 +33,7 @@ public class MessagesTable implements Table<Message> {
     public Map<String, Object> getUpdateValues(Message message) {
     	Map<String, Object> values = new HashMap<>();
     	addIfNotNull(values, "request_payload", message.getRequestPayload());
-    	addIfNotNull(values, "response_timestamp", message.getResponseTimestamp());
+    	addIfNotNull(values, "response_timestamp", Timestamp.valueOf(message.getResponseTimestamp()));
     	addIfNotNull(values, "response_status", message.getResponseStatus());
     	addIfNotNull(values, "response_payload", message.getResponsePayload());
     	return values;
