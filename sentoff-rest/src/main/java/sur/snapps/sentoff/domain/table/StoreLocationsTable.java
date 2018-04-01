@@ -1,10 +1,13 @@
 package sur.snapps.sentoff.domain.table;
 
 import sur.snapps.sentoff.domain.StoreLocation;
+import sur.snapps.sentoff.domain.repo.StoreLocationRowMapper;
 import sur.snapps.sentoff.domain.repo.Table;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.jdbc.core.RowMapper;
 
 /**
  * @author sur
@@ -12,6 +15,11 @@ import java.util.Map;
  */
 public class StoreLocationsTable implements Table<StoreLocation> {
 
+	@Override
+	public RowMapper<StoreLocation> getRowMapper() {
+		return new StoreLocationRowMapper();
+	}
+	
     @Override
     public String getTableName() {
         return "STORE_LOCATIONS";
@@ -26,5 +34,11 @@ public class StoreLocationsTable implements Table<StoreLocation> {
         values.put("city", row.getCity());
         values.put("country", row.getCountry());
         return values;
+    }
+    
+    @Override
+    public Map<String, Object> getUpdateValues(StoreLocation row) {
+    	// TODO Auto-generated method stub
+    	return null;
     }
 }

@@ -1,25 +1,20 @@
 package sur.snapps.sentoff.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import sur.snapps.sentoff.domain.repo.Row;
 
 public class Message implements Row {
 
 	private Number id;
-	private Date date;
-	private String uri;
-	private String method;
-	private String payload;
+	private LocalDateTime requestTimestamp;
+	private String requestUri;
+	private String requestMethod;
+	private String requestPayload;
+	private LocalDateTime responseTimestamp;
+	private int responseStatus;
+	private String responsePayload;
 
-	
-	public Date getDate() {
-		return date;
-	}
-	
-	public void setDate(Date date) {
-		this.date = date;
-	}
 
 	@Override
 	public Number getId() {
@@ -29,28 +24,60 @@ public class Message implements Row {
 	public void setId(Number id) {
 		this.id = id;
 	}
-	
-	public String getMethod() {
-		return method;
+
+	public LocalDateTime getRequestTimestamp() {
+		return requestTimestamp;
 	}
 	
-	public void setMethod(String method) {
-		this.method = method;
+	public void setRequestTimestamp(LocalDateTime requestTimestamp) {
+		this.requestTimestamp = requestTimestamp;
 	}
 	
-	public String getPayload() {
-		return payload;
+	public String getRequestUri() {
+		return requestUri;
 	}
 	
-	public void setPayload(String payload) {
-		this.payload = payload;
+	public void setRequestUri(String requestUri) {
+		this.requestUri = requestUri;
 	}
 	
-	public String getUri() {
-		return uri;
+	public String getRequestMethod() {
+		return requestMethod;
 	}
 	
-	public void setUri(String uri) {
-		this.uri = uri;
+	public void setRequestMethod(String requestMethod) {
+		this.requestMethod = requestMethod;
+	}
+	
+	public String getRequestPayload() {
+		return requestPayload;
+	}
+	
+	public void setRequestPayload(String requestPayload) {
+		this.requestPayload = requestPayload;
+	}
+	
+	public int getResponseStatus() {
+		return responseStatus;
+	}
+	
+	public void setResponseStatus(int responseStatus) {
+		this.responseStatus = responseStatus;
+	}
+	
+	public LocalDateTime getResponseTimestamp() {
+		return responseTimestamp;
+	}
+	
+	public void setResponseTimestamp(LocalDateTime responseTimestamp) {
+		this.responseTimestamp = responseTimestamp;
+	}
+	
+	public void setResponsePayload(String responsePayload) {
+		this.responsePayload = responsePayload;
+	}
+	
+	public String getResponsePayload() {
+		return responsePayload;
 	}
 }

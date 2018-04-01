@@ -1,36 +1,21 @@
 package sur.snapps.sentoff.rest.config;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-
 import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.WriteListener;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
+import javax.ws.rs.ext.ContextResolver;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.internal.scanning.PackageNamesScanner;
 import org.glassfish.jersey.server.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.AbstractRequestLoggingFilter;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-import org.springframework.web.util.WebUtils;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
-import sur.snapps.sentoff.domain.Message;
-import sur.snapps.sentoff.domain.repo.MessageRepository;
 
 /**
  * @author rogge
@@ -39,23 +24,31 @@ import sur.snapps.sentoff.domain.repo.MessageRepository;
 @Component
 public class JerseyConfig extends ResourceConfig {
 
-    private static final Log LOG = LogFactory.getLog(JerseyConfig.class);
-    
-    @Autowired
-    private MessageRepository messageRepository;
-
     public JerseyConfig() {
+    	super(MyObjectMapperProvider.class);
         registerEndpoints();
         configureSwagger();
-        configureJackson();
+    }
+    
+    static class MyObjectMapperProvider implements ContextResolver<ObjectMapper> {
+
+    	private ObjectMapper objectMapper;
+    	
+    	public MyObjectMapperProvider() {
+    		objectMapper = new ObjectMapper();
+    		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    		objectMapper.registerModule(new JavaTimeModule());
+		}
+    	
+		@Override
+		public ObjectMapper getContext(Class<?> type) {
+			return objectMapper;
+		}
+    	
     }
 
     private void registerEndpoints() {
         registerFinder(new PackageNamesScanner(new String[] {"sur.snapps.sentoff.rest.controller"}, true));
-    }
-
-    private void configureJackson() {
-        register(JacksonFeature.class);
     }
 
     private void configureSwagger() {
@@ -73,109 +66,8 @@ public class JerseyConfig extends ResourceConfig {
     }
 
     @Bean
-    public Filter requestLogger(){
-        AbstractRequestLoggingFilter f = new AbstractRequestLoggingFilter() {
-
-            @Override
-            protected void beforeRequest(HttpServletRequest request, String message) {
-            }
-
-            @Override
-            protected void afterRequest(HttpServletRequest request, String message) {
-                LOG.debug(message);
-                if ("GET".equals(request.getMethod())) {
-                	return;
-                }
-            	Message msg = new Message();
-            	msg.setDate(new Date());
-            	msg.setMethod(request.getMethod());
-            	msg.setUri(request.getRequestURI());
-            	ContentCachingRequestWrapper wrapper =
-    					WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
-            	String payload = null;
-				if (wrapper != null) {
-    				byte[] buf = wrapper.getContentAsByteArray();
-    				if (buf.length > 0) {
-    					int length = Math.min(buf.length, getMaxPayloadLength());
-    					try {
-    						payload = new String(buf, 0, length, wrapper.getCharacterEncoding());
-    					}
-    					catch (UnsupportedEncodingException ex) {
-    						payload = "[unknown]";
-    					}
-    				}
-    			}
-				// TODO cleanup method
-				if (payload == null) {
-					return;
-				}
-            	msg.setPayload(payload);
-            	messageRepository.addMessage(msg);
-            }
-
-            @Override
-            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-                MyHttpServletResponseWrapper responseWrapper = new MyHttpServletResponseWrapper(response);
-                super.doFilterInternal(request, responseWrapper, filterChain);
-                LOG.debug(responseWrapper.getOutputStream().toString());
-            }
-        };
-        f.setIncludePayload(true);
-        f.setIncludeQueryString(true);
-        f.setAfterMessagePrefix("REQUEST : ");
-        f.setAfterMessageSuffix("");
-        return f;
+    private Filter requestLogger() {
+    	return new RequestLoggingFilter();
     }
-
-    private class MyHttpServletResponseWrapper extends HttpServletResponseWrapper {
-
-        private ServletOutputStream outputStream;
-
-        MyHttpServletResponseWrapper(HttpServletResponse response) throws IOException {
-            super(response);
-            outputStream = new MyServletOutputStream(response.getOutputStream());
-        }
-
-        @Override
-        public ServletOutputStream getOutputStream() throws IOException {
-            return outputStream;
-        }
-    }
-
-    private class MyServletOutputStream extends ServletOutputStream {
-
-        private ServletOutputStream original;
-        private StringBuilder stringBuilder;
-
-        MyServletOutputStream(ServletOutputStream original) {
-            this.original = original;
-            stringBuilder = new StringBuilder("RESPONSE : ");
-        }
-
-        @Override
-        public void write(int b) throws IOException {
-            original.write(b);
-        }
-
-        @Override
-        public boolean isReady() {
-            return original.isReady();
-        }
-
-        @Override
-        public void setWriteListener(WriteListener writeListener) {
-            original.setWriteListener(writeListener);
-        }
-
-        @Override
-        public void write(byte[] b, int off, int len) throws IOException {
-            stringBuilder.append(new String(b, off, len, "UTF-8"));
-            original.write(b, off, len);
-        }
-
-        @Override
-        public String toString() {
-            return stringBuilder.toString();
-        }
-    }
+    
 }

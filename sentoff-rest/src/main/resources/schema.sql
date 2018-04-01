@@ -4,9 +4,22 @@ create table accounts (
 	id integer not null auto_increment,
 	name varchar(100) not null,
 	owner_id integer not null,
-	balance numeric(12,2) not null default 0,
 	primary key (id)
 );
+
+drop table if exists balances;
+
+create table balances (
+	id integer not null auto_increment,
+	account_id integer not null,
+	timestamp timestamp not null,
+	value numeric(12,2) not null,
+	primary key (id)
+);
+
+alter TABLE balances
+    add CONSTRAINT balances_fk_account
+    FOREIGN KEY (account_id) REFERENCES accounts (id);
 
 -- STORES
 CREATE TABLE stores (
@@ -51,9 +64,12 @@ drop table if exists messages;
 -- MESSAGE_LOGS
 CREATE TABLE messages (
 	id INTEGER NOT NULL AUTO_INCREMENT,
-	date timestamp NOT NULL,
-	method VARCHAR(15) not null,
-	uri varchar(100) not null,
-	payload text not null,
+	request_timestamp timestamp NOT NULL default 0,
+	request_method VARCHAR(15) not null,
+	request_uri varchar(100) not null,
+	request_payload text,
+	response_timestamp timestamp default 0,
+	response_status int,
+	response_payload text,
 	primary key (id)
 );

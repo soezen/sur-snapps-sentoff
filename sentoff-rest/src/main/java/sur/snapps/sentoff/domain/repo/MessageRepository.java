@@ -20,8 +20,16 @@ public class MessageRepository extends AbstractRepository {
         super(dataSource);
     }
 
-    public void addMessage(Message message) {
+    public void save(Message message) {
         Number generatedKey = insert(message).into(Tables.MESSAGES);
         message.setId(generatedKey);
+    }
+    
+    public void update(Message message) {
+    	update(Tables.MESSAGES).values(message);
+    }
+    
+    public Message findById(Number id) {
+    	return selectFrom(Tables.MESSAGES).whereId(id);
     }
 }

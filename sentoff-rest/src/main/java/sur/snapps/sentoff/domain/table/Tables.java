@@ -11,5 +11,6 @@ public interface Tables {
     public static final StoreLocationsTable STORE_LOCATIONS = new StoreLocationsTable();
     public static final StoresTable STORES = new StoresTable();
     public static final AccountsTable ACCOUNTS = new AccountsTable();
+    public static final BalancesTable BALANCES = new BalancesTable();
 
 }

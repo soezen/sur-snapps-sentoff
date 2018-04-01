@@ -23,7 +23,6 @@ public class AccountRowMapper extends AbstractRowMapper<Account> {
     	Account row = new Account();
         row.setId(rs.getInt(columnIndices.get(TABLE_NAME + ".ID")));
         row.setName(rs.getString(columnIndices.get(TABLE_NAME + ".NAME")));
-        row.setBalance(rs.getBigDecimal(columnIndices.get(TABLE_NAME + ".BALANCE")));
         row.setOwner(rs.getInt(columnIndices.get(TABLE_NAME + ".OWNER_ID")));
         return row;
     }

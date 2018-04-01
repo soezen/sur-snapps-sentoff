@@ -1,8 +1,6 @@
 package sur.snapps.sentoff.domain.repo;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -10,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import sur.snapps.sentoff.domain.account.Account;
+import sur.snapps.sentoff.domain.account.Balance;
 import sur.snapps.sentoff.domain.table.Tables;
 
 /**
@@ -20,9 +19,6 @@ import sur.snapps.sentoff.domain.table.Tables;
 public class AccountRepository extends AbstractRepository {
 
     @Autowired
-    private AccountRowMapper rowMapper;
-
-    @Autowired
     public AccountRepository(DataSource dataSource) {
         super(dataSource);
     }
@@ -30,22 +26,18 @@ public class AccountRepository extends AbstractRepository {
     // TODO use spring data? or something else
    
     public List<Account> findAll() {
-    	String sql = "select * from ACCOUNTS";
-    	return getNamedParameterJdbcTemplate()
-    			.query(sql, rowMapper);
+    	return selectFrom(Tables.ACCOUNTS).all();
     }
     
     public Account findById(Number id) {
-    	String sql = "select * from ACCOUNTS where ID = :id";
-    	Map<String, Object> params = new HashMap<>();
-    	params.put("id", id);
-    	List<Account> results = getNamedParameterJdbcTemplate()
-			.query(sql, params, rowMapper);
-    	if (results.size() > 1) throw new IllegalStateException("More than 1 account found with id " + id);
-		return results.isEmpty() ? null : results.get(0);
+    	return selectFrom(Tables.ACCOUNTS).whereId(id);
     }
  
     public Number save(Account account) {
     	return insert(account).into(Tables.ACCOUNTS);
+    }
+    
+    public Number save(Balance balance) {
+    	return insert(balance).into(Tables.BALANCES);
     }
 }
